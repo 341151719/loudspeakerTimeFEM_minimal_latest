@@ -1,0 +1,19 @@
+{
+  "extends": "transient_70Hz.json",
+  "model_name": "Python axisymmetric transient loudspeaker - nonlinear magnetic/ALE ROM",
+  "drive": {
+    "Lcoil_H": 0.0017396290667033851
+  },
+  "nonlinear": {
+    "enabled": true,
+    "law": "inputs/nonlinear_magnetic_law_20260728.json",
+    "solver": "monolithic_reduced_Newton_with_sparse_Sherman_Morrison",
+    "newton_tolerance": 1e-08,
+    "newton_max_iterations": 12,
+    "dynamic_BL_enabled": true,
+    "nonlinear_inductance_enabled": true,
+    "coordinate_limit_action": "error",
+    "ale_mapping": "material coil coordinate z=Z+x with field resampling; no full-domain remesh",
+    "ale_gap_half_width_m": 0.004
+  }
+}

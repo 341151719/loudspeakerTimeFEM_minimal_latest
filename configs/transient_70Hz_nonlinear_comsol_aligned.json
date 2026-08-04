@@ -1,0 +1,11 @@
+{
+  "extends": "transient_70Hz_nonlinear.json",
+  "model_name": "Python nonlinear transient - COMSOL aligned probes",
+  "probes": [
+    {"name": "axis_near_0p10m", "r_m": 0.0, "z_m": 0.10},
+    {"name": "axis_boundary93_0p165m", "r_m": 0.0, "z_m": 0.165},
+    {"name": "axis_rear_m0p12m", "r_m": 0.0, "z_m": -0.12},
+    {"name": "offaxis_45deg_0p10m", "r_m": 0.0707106781, "z_m": 0.0707106781},
+    {"name": "common_axis_0p14m", "r_m": 0.0, "z_m": 0.14}
+  ]
+}

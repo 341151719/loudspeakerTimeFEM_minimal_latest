@@ -1,0 +1,11 @@
+{
+  "extends": "transient_70Hz_nonlinear_comsol_physical_abc.json",
+  "model_name": "Python nonlinear transient - coil loss reference 70 Hz diagnostic",
+  "structure": {
+    "damping_reference_by_label_Hz": {
+      "Composite": 70.0,
+      "Glass Fiber": 70.0,
+      "Coil": 70.0
+    }
+  }
+}

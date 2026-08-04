@@ -1,0 +1,7 @@
+{
+  "extends": "transient_70Hz_nonlinear_comsol_physical_abc.json",
+  "model_name": "Python nonlinear transient - physical ABC with native 2D coenergy correction",
+  "nonlinear": {
+    "coupled_coenergy_enabled": true
+  }
+}

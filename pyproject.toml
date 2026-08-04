@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "loudspeaker-time-fem"
+version = "0.1.0"
+description = "Axisymmetric transient loudspeaker radiation FEM reusing the validated frequency-domain model"
+readme = "README_CN.md"
+requires-python = ">=3.11"
+dependencies = [
+  "numpy>=2.2",
+  "scipy>=1.16",
+  "pandas>=2.2",
+  "meshio>=5.3",
+  "scikit-fem>=12",
+  "pyamg>=5.2",
+  "gmsh>=4.11",
+  "rich>=13",
+  "threadpoolctl>=3.5",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=8.4,<9"]
+visualization = ["matplotlib>=3.10", "pillow>=11"]
+validation = ["matplotlib>=3.10", "pillow>=11"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]

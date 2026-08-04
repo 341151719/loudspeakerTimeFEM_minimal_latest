@@ -1,0 +1,58 @@
+{
+  "model_name": "Python axisymmetric transient loudspeaker - 70 Hz baseline",
+  "base_mainline": "inputs/frequency_mainline",
+  "base_config": "configs/fast_p1.json",
+  "mesh": "inputs/meshes/comsol_geometry_polyline_coarse_2p5mm.msh",
+  "mphtxt": "inputs/comsol_reference/Untitled.mphtxt",
+  "magnetostatic_vtu": "inputs/comsol_reference/magnetostatic_converged_55iter.vtu",
+  "air": {
+    "rho0_kg_m3": 1.2043175745358388,
+    "c0_m_s": 343.2035820928282,
+    "p_ref_Pa": 2e-05
+  },
+  "drive": {
+    "kind": "sine_voltage",
+    "frequency_Hz": 70.0,
+    "voltage_peak_V": 10.0,
+    "soft_start_cycles": 1.0,
+    "Rdc_ohm": 5.5651691631031,
+    "Lcoil_H": 0.00142
+  },
+  "time": {
+    "cycles": 4.0,
+    "steps_per_period": 180,
+    "newmark_beta": 0.25,
+    "newmark_gamma": 0.5,
+    "field_snapshot_phases_deg": [0, 90, 180, 270],
+    "snapshot_cycle": 4
+  },
+  "structure": {
+    "damping_reference_Hz": 40.0
+  },
+  "absorbing_layer": {
+    "kind": "polynomial_sponge_on_reused_pml_domains",
+    "pml_domain_ids": [1, 5],
+    "inner_radius_m": 0.165,
+    "outer_radius_m": 0.18,
+    "polynomial_order": 3,
+    "target_one_way_amplitude": 0.1,
+    "outer_first_order_radiation_condition": true
+  },
+  "exterior": {
+    "axis_distance_m": 1.0,
+    "effective_piston_radius_m": 0.07,
+    "model": "retarded_baffled_piston_low_frequency_estimate"
+  },
+  "probes": [
+    {"name": "axis_near_0p10m", "r_m": 0.0, "z_m": 0.10},
+    {"name": "axis_boundary93_0p165m", "r_m": 0.0, "z_m": 0.165},
+    {"name": "axis_rear_m0p12m", "r_m": 0.0, "z_m": -0.12},
+    {"name": "offaxis_45deg_0p10m", "r_m": 0.0707106781, "z_m": 0.0707106781}
+  ],
+  "export": {
+    "last_cycles_for_spectrum": 1,
+    "harmonics": 10,
+    "write_snapshots": true,
+    "csv_float_format": "%.12e"
+  }
+}

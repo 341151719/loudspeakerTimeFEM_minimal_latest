@@ -1,0 +1,8 @@
+{
+  "extends": "transient_70Hz_nonlinear_comsol_physical_abc.json",
+  "model_name": "Python nonlinear transient - physical ABC, 6-cycle convergence diagnostic",
+  "time": {
+    "cycles": 6,
+    "snapshot_cycle": 6
+  }
+}

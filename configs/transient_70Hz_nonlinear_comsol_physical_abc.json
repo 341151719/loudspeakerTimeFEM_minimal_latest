@@ -1,0 +1,58 @@
+{
+  "extends": "transient_70Hz_nonlinear_comsol_native_acoustic.json",
+  "model_name": "Python nonlinear transient - native physical acoustic domain with ABC",
+  "acoustic_contract": {
+    "kind": "comsol_transient_native_geometry",
+    "mesh": "inputs/comsol_transient_mesh.mphtxt",
+    "acoustic_domains": [2, 3, 5],
+    "pml_domains": [],
+    "uniform_refinement_levels": 0,
+    "structure_projection": "native interface quadrature projected to closest reference P2 structural edge",
+    "exterior_continuation": "pending",
+    "calibration": "none"
+  },
+  "absorbing_layer": {
+    "kind": "first_order_characteristic_boundary_at_comsol_pml_inner_radius",
+    "pml_domain_ids": [],
+    "inner_radius_m": 0.115,
+    "outer_radius_m": 0.115001,
+    "polynomial_order": 3,
+    "target_one_way_amplitude": 1.0,
+    "outer_first_order_radiation_condition": true,
+    "outer_curvature_correction": true
+  },
+  "structure": {
+    "damping_reference_by_label_Hz": {
+      "Composite": 70.0,
+      "Glass Fiber": 70.0
+    }
+  },
+  "probes": [
+    {
+      "name": "axis_near_0p10m",
+      "r_m": 0.0,
+      "z_m": 0.1004113924048987
+    },
+    {
+      "name": "axis_rear_m0p12m",
+      "r_m": 0.0,
+      "z_m": -0.1207533333334398,
+      "outside_domain_action": "nearest_boundary_diagnostic"
+    },
+    {
+      "name": "offaxis_45deg_0p10m",
+      "r_m": 0.07045301463741827,
+      "z_m": 0.0718626336742816
+    },
+    {
+      "name": "comsol_native_point6",
+      "r_m": 0.0,
+      "z_m": 0.115
+    },
+    {
+      "name": "rear_physical_m0p10",
+      "r_m": 0.0,
+      "z_m": -0.10
+    }
+  ]
+}

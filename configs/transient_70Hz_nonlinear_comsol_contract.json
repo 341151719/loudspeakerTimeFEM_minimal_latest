@@ -1,0 +1,8 @@
+{
+  "extends": "transient_70Hz_nonlinear_comsol_aligned.json",
+  "model_name": "Python nonlinear transient - COMSOL electrical contract",
+  "drive": {
+    "Rdc_ohm": 8.115781021773618
+  },
+  "validation_note": "Rdc is taken from the independently evaluated COMSOL transient coil variable mf.RCoil_1. Other ROM laws remain Python field-derived and are not fitted to transient outputs."
+}

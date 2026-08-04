@@ -1,0 +1,63 @@
+{
+  "kind": "field_derived_separable_magnetic_coenergy_ROM",
+  "displacement_limit_m": 0.004,
+  "bl_chebyshev_coordinate": "x/displacement_limit_m",
+  "bl_chebyshev_coefficients_N_A": [
+    8.47838728352646,
+    -0.06363928664211893,
+    -1.6665757530100784,
+    0.01988056263569547,
+    0.2962136398017761,
+    0.002508679613030205,
+    -0.020732341095576395
+  ],
+  "current_limit_A": 1.0,
+  "lambda_polynomial_coefficients_Wb_ascending": [
+    0.0,
+    0.0017396290667033851,
+    0.0000130181044,
+    -0.00000459889524,
+    0.000000404197281
+  ],
+  "raw_displacement_scan": {
+    "method": "8-neighbour inverse-distance interpolation of Br, shifted coil quadrature, followed by degree-6 Chebyshev compression",
+    "shift_mm": [-4.0, -3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0, 4.0],
+    "compressed_BL_N_A": [
+      7.128542873615974,
+      8.051867581582787,
+      9.193281865185275,
+      10.122324986675038,
+      10.461909017433891,
+      10.067951740242236,
+      9.092390132884795,
+      7.929574433093738,
+      7.046042784829189
+    ]
+  },
+  "raw_current_scan": {
+    "method": "native nonlinear B_inverse magnetostatic FEM with permanent magnet plus homogenized 100-turn coil current",
+    "current_A": [-1.0, -0.5, 0.0, 0.5, 1.0],
+    "BL_N_A": [
+      10.518421216158378,
+      10.490993771116361,
+      10.461909017433893,
+      10.431796503757075,
+      10.401148466876318
+    ],
+    "current_flux_linkage_Wb": [
+      -0.001721607869801016,
+      -0.000865959883021205,
+      0.0,
+      0.000872519459872275,
+      0.0017484524731265216
+    ],
+    "iterations_each": 55,
+    "residual_target": 1e-05
+  },
+  "coenergy_contract": {
+    "force": "F = BL(x)*i",
+    "motional_emf": "e = d/dt integral_0^x BL(s) ds",
+    "inductive_voltage": "d(lambda_i(i))/dt",
+    "note": "BL(x) and lambda_i(i) are kept separable so force and back-EMF remain energy conjugate"
+  }
+}

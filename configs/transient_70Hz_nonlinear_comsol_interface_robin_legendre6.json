@@ -1,0 +1,11 @@
+{
+  "extends": "transient_70Hz_nonlinear_comsol_physical_abc.json",
+  "model_name": "Python nonlinear transient - COMSOL-interface Legendre L6 Robin diagnostic",
+  "absorbing_layer": {
+    "kind": "measured_COMSOL_angular_Robin_L6_at_70Hz",
+    "robin_legendre_real_1_per_m": [7.723501979286351, 0.3064948260967818, -0.8128516275207871, 0.5142933001238257, 0.661946465466325, -0.8626055584531279, 0.3448121228653122],
+    "robin_legendre_imag_1_per_m": [3.0249684023148564, 0.012398199500213307, -0.2756291597745271, 0.08565750275558416, 0.18903600040268947, -0.27640416807021406, 0.15671347746779357],
+    "reference_omega_rad_s": 439.822971502571,
+    "reference_identified": true
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "extends": "transient_70Hz_nonlinear_comsol_physical_abc.json",
+  "model_name": "Python nonlinear transient - COMSOL-interface Robin diagnostic",
+  "absorbing_layer": {
+    "kind": "measured_COMSOL_physical_PML_interface_Robin_at_70Hz",
+    "robin_stiffness_1_per_m": 7.671752148414155,
+    "robin_damping_s_per_m": 0.006847665181713479,
+    "coefficient_source": "pressure-weighted H1 projection of refined COMSOL boundary 79/82/92 pressure and outward normal gradient",
+    "reference_identified": true
+  }
+}

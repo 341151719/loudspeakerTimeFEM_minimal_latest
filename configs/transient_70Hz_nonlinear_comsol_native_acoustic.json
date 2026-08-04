@@ -1,0 +1,43 @@
+{
+  "extends": "transient_70Hz_nonlinear_comsol_contract.json",
+  "model_name": "Python nonlinear transient - native COMSOL acoustic geometry",
+  "acoustic_contract": {
+    "kind": "comsol_transient_native_geometry",
+    "mesh": "inputs/comsol_transient_mesh.mphtxt",
+    "acoustic_domains": [1, 2, 3, 5, 6],
+    "pml_domains": [1, 6],
+    "structure_projection": "native interface quadrature projected to closest reference P2 structural edge",
+    "calibration": "none"
+  },
+  "absorbing_layer": {
+    "kind": "polynomial_sponge_on_native_transient_pml_domains",
+    "pml_domain_ids": [1, 6],
+    "inner_radius_m": 0.115,
+    "outer_radius_m": 0.13,
+    "polynomial_order": 3,
+    "target_one_way_amplitude": 0.1,
+    "outer_first_order_radiation_condition": true
+  },
+  "probes": [
+    {
+      "name": "axis_near_0p10m",
+      "r_m": 0.0,
+      "z_m": 0.1004113924048987
+    },
+    {
+      "name": "axis_rear_m0p12m",
+      "r_m": 0.0,
+      "z_m": -0.1207533333334398
+    },
+    {
+      "name": "offaxis_45deg_0p10m",
+      "r_m": 0.07045301463741827,
+      "z_m": 0.0718626336742816
+    },
+    {
+      "name": "comsol_native_point6",
+      "r_m": 0.0,
+      "z_m": 0.115
+    }
+  ]
+}

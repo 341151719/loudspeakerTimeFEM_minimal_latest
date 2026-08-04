@@ -1,0 +1,14 @@
+{
+  "extends": "transient_70Hz_nonlinear_comsol_physical_abc.json",
+  "model_name": "Python nonlinear transient - native tensor coenergy diagnostic",
+  "nonlinear": {
+    "law": "inputs/nonlinear_magnetic_coenergy_tensor_20260801.json",
+    "tensor_coenergy_enabled": true,
+    "coupled_coenergy_enabled": false,
+    "solver": "monolithic_reduced_Newton_with_tensor_coenergy_derivatives",
+    "coordinate_limit_action": "error",
+    "magnetic_source_contract": "same b(x) is current RHS and flux observation",
+    "comsol_response_identification": false,
+    "diagnostic_only": true
+  }
+}

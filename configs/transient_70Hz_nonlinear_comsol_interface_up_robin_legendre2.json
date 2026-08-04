@@ -1,0 +1,12 @@
+{
+  "extends": "transient_70Hz_nonlinear_comsol_physical_abc.json",
+  "model_name": "Python nonlinear transient - physical-side COMSOL-interface Legendre L2 Robin",
+  "absorbing_layer": {
+    "kind": "measured_COMSOL_physical_side_angular_Robin_L2_at_70Hz",
+    "robin_legendre_real_1_per_m": [8.454787172724126, 0.24756216898053607, -0.5939127414096121],
+    "robin_legendre_imag_1_per_m": [1.2429372991514156, -0.0025255927328645955, 0.08038700569754914],
+    "reference_omega_rad_s": 439.822971502571,
+    "coefficient_source": "up() physical-side trace on COMSOL boundaries 79/82/92",
+    "reference_identified": true
+  }
+}
