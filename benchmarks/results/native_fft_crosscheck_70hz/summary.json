@@ -1,0 +1,7 @@
+{
+  "probe": "COMSOL native point 6",
+  "least_squares_H1_H10_THD": 0.02521240620126082,
+  "COMSOL_native_FFT_THD": 0.025267762520023426,
+  "absolute_percentage_point_difference": 0.005535631876260605,
+  "relative_difference": 0.002190788310549419
+}

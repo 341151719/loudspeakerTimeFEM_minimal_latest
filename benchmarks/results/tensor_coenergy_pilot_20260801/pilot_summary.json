@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "kind": "native_tensor_coenergy_pilot",
+  "input_hash": "7f7d03428f4d390097b5a0a2eaf79f5398cc40f6fa23cc37756889b734278ec5",
+  "input_hashes": {
+    "magnetic_mesh": "07172d4acb374cbed2a947637decd5c9ddf67dea73553fb582bc99c6cf3d1157",
+    "axisym_magnetics_py": "6c6c709a9d5e0be0851d10ec050bf83ede7e03a8d9b90577af7635938b79786f",
+    "comsol_driver_model_py": "c8f0944058d2008edc30c6c9c9e6f08b120ef7900c317af8298b6c7e132909ae",
+    "tensor_builder_py": "b345eb102896df9c4f1f7bb9fcbfe6a7c8f716537abfc078a05534d2a460a5ad",
+    "soft_iron_bh_table": "5e3f62b5e0164ff4f7166b035a5c709b6a52f5c7ce1dbb0906abca7a9a6662bb"
+  },
+  "mesh_levels_evaluated": [
+    0,
+    1,
+    2
+  ],
+  "mesh_convergence_max_L0_L1": 0.012065721731767889,
+  "mesh_convergence_max_L1_L2": 0.008548589078387132,
+  "selected_mesh_level": -1,
+  "residual_tolerances": {
+    "pilot": 1E-7,
+    "strict": 1E-9
+  },
+  "pilot_points": 9,
+  "all_pilot_points_converged": true,
+  "all_locator_margins_positive": true,
+  "fixed_vtu_diagnostic": "fixed_vtu_shift_diagnostic.json",
+  "x0_current_scan_comparison": null,
+  "status": "failed_mesh_not_converged",
+  "input_root": "inputs/frequency_mainline",
+  "benchmark_id": "tensor_coenergy_pilot_20260801",
+  "public_snapshot_note": "The 18 field snapshots and full run directory are intentionally not included."
+}

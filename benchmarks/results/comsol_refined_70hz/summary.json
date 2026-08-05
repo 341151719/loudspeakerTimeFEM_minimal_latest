@@ -1,0 +1,152 @@
+{
+  "status": "comparison_completed",
+  "f0_Hz": 70.0,
+  "window": "3*T0 <= t < 4*T0",
+  "criteria": {
+    "coil_current_A:H1": true,
+    "coil_displacement_m:H1": true,
+    "pressure_python_axis_near_actual:H1": true,
+    "pressure_python_offaxis_actual:H1": true,
+    "pressure_common_rear_physical_m0p10:H1": true,
+    "near_axis_THD": true,
+    "dynamic_BL_range_endpoints": true
+  },
+  "all_registered_physics_criteria_pass": true,
+  "diagnostic_only_signals": [
+    "pressure_python_axis_rear_actual"
+  ],
+  "unavailable_registered_signals": [
+    {
+      "signal": "pressure_python_axis_boundary_actual",
+      "reason": "coordinate outside COMSOL acoustic mesh or undefined"
+    },
+    {
+      "signal": "pressure_common_axis_0p14m",
+      "reason": "coordinate outside COMSOL acoustic mesh or undefined"
+    }
+  ],
+  "metrics": [
+    {
+      "signal": "coil_current_A",
+      "comsol_samples": 69,
+      "python_samples": 180,
+      "comsol_dc": 0.000012655163505175616,
+      "python_dc": 0.0000058241978639461515,
+      "comsol_H1_peak": 0.5074444797314485,
+      "python_H1_peak": 0.5051932026398123,
+      "H1_amplitude_relative_error": 0.004436499324670205,
+      "H1_phase_python_minus_comsol_deg": -1.3980557973892356,
+      "comsol_THD": 0.05056218204727731,
+      "python_THD": 0.04562965192578153,
+      "THD_absolute_percentage_point_error": 0.4932530121495783,
+      "THD_relative_error": 0.0975537431688313,
+      "common_time_waveform_NRMSE": 0.02696358308126156
+    },
+    {
+      "signal": "coil_displacement_m",
+      "comsol_samples": 69,
+      "python_samples": 180,
+      "comsol_dc": 0.000011296941173335947,
+      "python_dc": 0.000003302791397823113,
+      "comsol_H1_peak": 0.0016217256105113115,
+      "python_H1_peak": 0.001624578632972365,
+      "H1_amplitude_relative_error": 0.0017592510364031525,
+      "H1_phase_python_minus_comsol_deg": 0.609476386987463,
+      "comsol_THD": 0.002742632682863106,
+      "python_THD": 0.0024634261869840826,
+      "THD_absolute_percentage_point_error": 0.027920649587902333,
+      "THD_relative_error": 0.10180236588865862,
+      "common_time_waveform_NRMSE": 0.014807918430329975
+    },
+    {
+      "signal": "dynamic_BL_N_A",
+      "comsol_samples": 69,
+      "python_samples": 180,
+      "comsol_dc": 10.078084091940653,
+      "python_dc": 9.994050461394819,
+      "comsol_H1_peak": 0.06127874830880306,
+      "python_H1_peak": 0.046750557280884314,
+      "H1_amplitude_relative_error": 0.23708367792871,
+      "H1_phase_python_minus_comsol_deg": -15.061808715333433,
+      "comsol_THD": 8.644336152500047,
+      "python_THD": 9.755583089719169,
+      "THD_absolute_percentage_point_error": 111.12469372191214,
+      "THD_relative_error": 0.12855202731764837,
+      "common_time_waveform_NRMSE": 0.01096098872367376
+    },
+    {
+      "signal": "pressure_python_axis_near_actual",
+      "comsol_samples": 69,
+      "python_samples": 180,
+      "comsol_dc": -0.11764105938972029,
+      "python_dc": 0.00005051645269600995,
+      "comsol_H1_peak": 9.359684442692767,
+      "python_H1_peak": 9.03810064822533,
+      "H1_amplitude_relative_error": 0.03435840133675691,
+      "H1_phase_python_minus_comsol_deg": 0.5491687187041464,
+      "comsol_THD": 0.024965637742461078,
+      "python_THD": 0.022553104494740368,
+      "THD_absolute_percentage_point_error": 0.241253324772071,
+      "THD_relative_error": 0.09663415261439605,
+      "common_time_waveform_NRMSE": 0.0448832894622678
+    },
+    {
+      "signal": "pressure_python_axis_rear_actual",
+      "comsol_samples": 69,
+      "python_samples": 180,
+      "comsol_dc": -0.0004782475329460984,
+      "python_dc": -0.000056626377930107615,
+      "comsol_H1_peak": 4.552666097358737,
+      "python_H1_peak": 7.598214941900724,
+      "H1_amplitude_relative_error": 0.6689594139813777,
+      "H1_phase_python_minus_comsol_deg": -49.023820809478885,
+      "comsol_THD": 0.032972973489012444,
+      "python_THD": 0.02278940792286403,
+      "THD_absolute_percentage_point_error": 1.0183565566148416,
+      "THD_relative_error": 0.30884583610701277,
+      "common_time_waveform_NRMSE": 1.322054962375793
+    },
+    {
+      "signal": "pressure_python_offaxis_actual",
+      "comsol_samples": 69,
+      "python_samples": 180,
+      "comsol_dc": -0.12483326743663496,
+      "python_dc": 0.000054556214501297696,
+      "comsol_H1_peak": 9.950917488125812,
+      "python_H1_peak": 9.837129228734861,
+      "H1_amplitude_relative_error": 0.011434951553636306,
+      "H1_phase_python_minus_comsol_deg": 0.5762539986548096,
+      "comsol_THD": 0.025579599802519903,
+      "python_THD": 0.02248433100427557,
+      "THD_absolute_percentage_point_error": 0.30952687982443333,
+      "THD_relative_error": 0.12100536451471033,
+      "common_time_waveform_NRMSE": 0.03166743424416006
+    },
+    {
+      "signal": "pressure_common_rear_physical_m0p10",
+      "comsol_samples": 69,
+      "python_samples": 180,
+      "comsol_dc": 0.023327552455250526,
+      "python_dc": -0.00007709015378409496,
+      "comsol_H1_peak": 10.166651129630418,
+      "python_H1_peak": 9.535753313149693,
+      "H1_amplitude_relative_error": 0.062055617767977876,
+      "H1_phase_python_minus_comsol_deg": 0.8748701232136804,
+      "comsol_THD": 0.023926676543271044,
+      "python_THD": 0.022824385416539413,
+      "THD_absolute_percentage_point_error": 0.11022911267316304,
+      "THD_relative_error": 0.0460695460457349,
+      "common_time_waveform_NRMSE": 0.06649303847619992
+    }
+  ],
+  "note": "COMSOL numerical-convergence acceptance is evaluated separately and is required for the final validation claim.",
+  "benchmark_id": "comsol_refined_70hz",
+  "run_date": "2026-07-28",
+  "conditions": {
+    "frequency_hz": 70,
+    "drive_voltage_peak_v": 10,
+    "cycles": 4,
+    "analysis_window": "3*T0 <= t < 4*T0"
+  },
+  "public_snapshot_note": "Raw COMSOL and Python time series are intentionally not included; this file is a compact archival summary."
+}

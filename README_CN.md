@@ -1,7 +1,7 @@
 # loudspeakerTimeFEM 最小独立交接包
 
 版本冻结日期：2026-08-01  
-交付性质：可独立安装、装配和运行 Python FEM；不包含历史运行结果、图片或 COMSOL 已解模型。
+交付性质：可独立安装、装配和运行 Python FEM；不包含大型历史运行目录、图片或 COMSOL 已解模型。精选的小型 benchmark 汇总在 [`benchmarks/`](benchmarks/) 中，并明确区分通过项、未闭合项和诊断项。
 
 ## 1. 新 AI 必须先接受的结论
 
@@ -32,14 +32,15 @@ inputs/nonlinear_magnetic_law_20260728.json
 - `configs/`：生产配置和隔离的诊断配置；
 - `tests/`、`self_test.py`：代码与独立性检查；
 - `tools/`：磁律构造、张量共能 pilot/拟合/报告、审计及诊断工具源码；
-- `comsol_validation/` 中的 Python/Java 导出与对比程序，但不带对比数据；
-- 本文件，它是包内唯一的项目说明文档。
+- `comsol_validation/` 中的 Python/Java 导出与对比程序；
+- `benchmarks/` 中的精选小型 CSV/JSON 结果快照与其说明；
+- 本文件及 benchmark 目录中的项目说明文档。
 
 本包明确不包含：
 
-- `runs/`、历史 CSV/NPZ/JSON 结果、checkpoint；
+- `runs/`、大型历史 CSV/NPZ/JSON 结果、checkpoint；精选且经过清理的 benchmark 摘要例外保存在 `benchmarks/`；
 - PNG/JPG/GIF、VTK/VTU 可视化输出（频域子模型运行必需的三个静磁 VTU 除外）；
-- COMSOL solved MPH、COMSOL 运行日志及历史 benchmark 导出数据；
+- COMSOL solved MPH、COMSOL 运行日志及未裁剪的历史 benchmark 导出数据；
 - `.venv`、`site-packages`、pip wheel、缓存、`__pycache__`、egg-info；
 - 修改历史、旧报告、旧压缩包和备份副本。
 
@@ -145,7 +146,7 @@ pilot 的 9/9 个点均求解收敛，但：
 
 ## 9. 图、数据与报告的硬性要求
 
-本包没有附带图和历史数据，但下一轮研究必须重新导出：
+本包没有附带大型图和原始长时序；`benchmarks/` 仅保存小型机器可读摘要。下一轮研究必须重新导出：
 
 - 三层网格与材料/线圈/永磁体标记图；
 - 九点 pilot 的 `psi`、力、残差和层间变化表；
