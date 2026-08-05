@@ -6,7 +6,7 @@
 
 完整的中文交接说明在 [`README_CN.md`](README_CN.md)。它记录了当前生产配置、物理合同、验证边界、张量共能 pilot 的停止点以及下一阶段的推荐路线。版本冻结日期为 **2026-08-01**。
 
-这个仓库不包含历史运行结果、图片、已求解的 COMSOL MPH 文件或 Python 虚拟环境；`inputs/` 中保留的是开箱运行所需的网格、几何、静磁场和磁律输入。
+这个仓库不包含大型历史运行目录、图片、已求解的 COMSOL MPH 文件或 Python 虚拟环境；`inputs/` 中保留的是开箱运行所需的网格、几何、静磁场和磁律输入。精选的小型 benchmark 汇总位于 [`benchmarks/`](benchmarks/)，并明确标注哪些结论通过、未闭合或仅供诊断。
 
 ## What this project contains
 
@@ -19,6 +19,13 @@
 - `tools/`：磁律、张量共能 pilot、审计和报告工具。
 
 COMSOL 许可证和已求解模型不在仓库中。默认 Python 主链不在运行时读取 COMSOL 结果；COMSOL 文件只用于独立 benchmark。
+
+## Curated benchmarks
+
+[`benchmarks/README.md`](benchmarks/README.md) and [`benchmarks/README_CN.md`](benchmarks/README_CN.md)
+describe the public-safe benchmark snapshot. It includes the 70 Hz refined comparison,
+time/mesh convergence, interface isolation, FFT cross-check, boundary diagnostics, and the
+failed tensor-co-energy pilot. Raw COMSOL models and long time series remain external inputs.
 
 ## Installation and first checks
 

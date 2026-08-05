@@ -1,0 +1,44 @@
+{
+  "benchmark": "comsol_validation/raw/comsol_refined_mesh_v2",
+  "policy": "Each candidate is isolated. Production changes require a COMSOL-benchmark improvement or a demonstrably corrected physical contract without material regression.",
+  "stages": [
+    {
+      "candidate": "coil damping reference changed from 40 Hz to 70 Hz",
+      "decision": "rejected",
+      "reason": "Changes were only 1e-6 to 1e-5 scale and gave no meaningful COMSOL improvement.",
+      "diagnostic_config": "configs/transient_70Hz_nonlinear_comsol_physical_abc_coil_damping70.json"
+    },
+    {
+      "candidate": "run Python transient for 6 cycles and compare its final cycle with COMSOL cycle 4",
+      "decision": "rejected_as_production_default",
+      "reason": "Internal cycle convergence improved strongly, but COMSOL errors were unchanged or microscopically worse.",
+      "cycle_6_steady_state_relative_rms": {
+        "current": 5.999589244919964e-7,
+        "coil_displacement": 6.693739403303465e-8,
+        "axis_near_pressure": 5.007610993276861e-6
+      },
+      "cycle_4_to_cycle_6_COMSOL_error_change": {
+        "current_H1_relative": [0.00453022718024136, 0.004544902057993306],
+        "displacement_H1_relative": [0.0017997364107694587, 0.0018085302723994743],
+        "near_pressure_H1_relative": [0.0342806025241421, 0.03428677167925498],
+        "dynamic_BL_H1_relative": [0.23706110931823784, 0.23732780825226568]
+      },
+      "diagnostic_config": "configs/transient_70Hz_nonlinear_comsol_physical_abc_6cycles_diagnostic.json"
+    },
+    {
+      "candidate": "native low-order displacement-current coupled magnetic coenergy",
+      "decision": "rejected_as_production_default",
+      "reason": "Maxwell reciprocity and regression tests pass, but dynamic BL agreement worsens materially; the existing native scans do not contain a true 2D x-i surface.",
+      "baseline_to_candidate": {
+        "current_THD_absolute_percentage_point_error": [0.4916, 0.4603578329496788],
+        "dynamic_BL_H1_relative_error": [0.23706110931823784, 0.5635101173610795],
+        "dynamic_BL_phase_error_deg": [-15.059630353206153, 27.189347116469158],
+        "dynamic_BL_waveform_NRMSE": [0.01096249072550687, 0.011163989246944077],
+        "near_pressure_H1_relative_error": [0.0342806025241421, 0.0342545106230779]
+      },
+      "diagnostic_config": "configs/transient_70Hz_nonlinear_comsol_physical_abc_coupled_coenergy_diagnostic.json",
+      "required_next_evidence": "Generate a Python-native magnetostatic tensor scan BL(x,i) or W'(x,i), then fit one coenergy surface instead of combining two one-dimensional scans."
+    }
+  ],
+  "production_default_changed": false
+}

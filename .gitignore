@@ -5,3 +5,8 @@ __pycache__/
 runs/
 outputs/
 *.log
+*.mph
+*.class
+benchmarks/raw/
+benchmarks/runs/
+benchmarks/field_snapshots/

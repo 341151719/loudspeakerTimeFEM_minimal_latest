@@ -1,0 +1,66 @@
+{
+  "status": "completed",
+  "comparison": "COMSOL versus Python interface normal displacement H1",
+  "normalization": "Python interface motion complex-scaled to COMSOL coil displacement H1",
+  "coil_displacement_H1_m": {
+    "comsol": {
+      "real": -0.0015086476591404103,
+      "imag": 0.0005967764812775706,
+      "magnitude": 0.001622393271693358
+    },
+    "python_raw": {
+      "real": -0.0015246679210372265,
+      "imag": 0.0005397320427098513,
+      "magnitude": 0.001617381509529439
+    },
+    "python_to_comsol_complex_scale": {
+      "real": 1.0024324615367988,
+      "imag": -0.036553245703323856,
+      "magnitude": 1.0030986889205733,
+      "phase_deg": -2.088339382364372
+    }
+  },
+  "global_interface_metrics": {
+    "reference_rms_m": 0.0009451053761105347,
+    "candidate_rms_m": 0.0009456751886987047,
+    "relative_complex_L2_error": 0.0021275126757159743,
+    "complex_correlation_magnitude": 0.9999979394342053,
+    "correlation_phase_deg": 0.011339798169069104
+  },
+  "full_probe_pressure_from_interface_motion": {
+    "axis_near_0p10m": {
+      "comsol_motion_magnitude_Pa": 9.023417222980983,
+      "python_motion_magnitude_Pa": 9.023967361695442,
+      "python_over_comsol_magnitude": 1.0000609678906411,
+      "python_minus_comsol_phase_deg": -0.0004114764538370653
+    },
+    "axis_rear_m0p12m": {
+      "comsol_motion_magnitude_Pa": 7.584049803102201,
+      "python_motion_magnitude_Pa": 7.586304278288438,
+      "python_over_comsol_magnitude": 1.0002972653456619,
+      "python_minus_comsol_phase_deg": 0.009972773936123556
+    },
+    "offaxis_45deg_0p10m": {
+      "comsol_motion_magnitude_Pa": 9.821203256300398,
+      "python_motion_magnitude_Pa": 9.821747969981102,
+      "python_over_comsol_magnitude": 1.000055463028968,
+      "python_minus_comsol_phase_deg": -0.0007943588843639554
+    },
+    "comsol_native_point6": {
+      "comsol_motion_magnitude_Pa": 7.921800880675924,
+      "python_motion_magnitude_Pa": 7.9222814436336035,
+      "python_over_comsol_magnitude": 1.000060663347251,
+      "python_minus_comsol_phase_deg": -0.0004311813847535398
+    },
+    "rear_physical_m0p10": {
+      "comsol_motion_magnitude_Pa": 9.517728626487186,
+      "python_motion_magnitude_Pa": 9.520794236359833,
+      "python_over_comsol_magnitude": 1.0003220946922269,
+      "python_minus_comsol_phase_deg": 0.010234923879009511
+    }
+  },
+  "per_boundary_csv": "per_boundary_metrics.csv",
+  "benchmark_id": "interface_motion_substitution_70hz",
+  "run_date": "2026-07-29",
+  "public_snapshot_note": "The compressed interface field and raw COMSOL traces are not included."
+}

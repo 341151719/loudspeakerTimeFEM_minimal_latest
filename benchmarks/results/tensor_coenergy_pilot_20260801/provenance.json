@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "command": "tools/build_tensor_magnetic_coenergy.py pilot --workdir runs/tensor_magnetic_scan_20260801 --mesh-levels 0 1",
+  "generated_utc": "2026-08-01T11:36:35Z",
+  "generated_local": "2026-08-01T19:36:35+0800",
+  "python": "3.12.3",
+  "numpy": "2.5.1",
+  "input_hashes": {
+    "magnetic_mesh": "07172d4acb374cbed2a947637decd5c9ddf67dea73553fb582bc99c6cf3d1157",
+    "axisym_magnetics_py": "6c6c709a9d5e0be0851d10ec050bf83ede7e03a8d9b90577af7635938b79786f",
+    "comsol_driver_model_py": "c8f0944058d2008edc30c6c9c9e6f08b120ef7900c317af8298b6c7e132909ae",
+    "tensor_builder_py": "b345eb102896df9c4f1f7bb9fcbfe6a7c8f716537abfc078a05534d2a460a5ad",
+    "soft_iron_bh_table": "5e3f62b5e0164ff4f7166b035a5c709b6a52f5c7ce1dbb0906abca7a9a6662bb"
+  }
+}

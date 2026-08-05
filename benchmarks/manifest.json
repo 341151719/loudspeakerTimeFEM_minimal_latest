@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "snapshot_id": "loudspeakerTimeFEM_codex_full_20260802",
+  "snapshot_policy": "compact archival benchmark evidence; not a rerunnable COMSOL dataset",
+  "selection_policy": {
+    "include": [
+      "registered validation metrics",
+      "time and mesh convergence summaries",
+      "layer-isolation diagnostics",
+      "small cross-check tables",
+      "accepted/rejected change decisions",
+      "failed gates that define current limitations"
+    ],
+    "exclude": [
+      "COMSOL solved MPH files",
+      "COMSOL raw input models and long solver logs",
+      "full time-series exports",
+      "VTU field snapshots and generated animations",
+      "Python virtual environments and caches",
+      "host-specific absolute paths"
+    ]
+  },
+  "benchmarks": [
+    {
+      "id": "comsol_refined_70hz",
+      "kind": "external_reference_comparison",
+      "status": "engineering_criteria_pass",
+      "conditions": {
+        "frequency_hz": 70,
+        "drive_voltage_peak_v": 10,
+        "cycles": 4,
+        "analysis_window": "3*T0 <= t < 4*T0"
+      },
+      "artifacts": [
+        "results/comsol_refined_70hz/summary.json",
+        "results/comsol_refined_70hz/comparison_metrics.csv",
+        "results/comsol_refined_70hz/harmonic_comparison.csv"
+      ],
+      "note": "The rear probe inside the COMSOL PML is diagnostic only; the physical rear probe is registered separately."
+    },
+    {
+      "id": "comsol_time_convergence_70hz",
+      "kind": "external_numerical_convergence",
+      "status": "primary_signals_pass",
+      "artifacts": [
+        "results/comsol_time_convergence_70hz/summary.json",
+        "results/comsol_time_convergence_70hz/convergence_metrics.csv"
+      ]
+    },
+    {
+      "id": "comsol_mesh_convergence_70hz",
+      "kind": "external_numerical_convergence",
+      "status": "strict_gate_open",
+      "artifacts": [
+        "results/comsol_mesh_convergence_70hz/summary.json",
+        "results/comsol_mesh_convergence_70hz/convergence_metrics.csv"
+      ],
+      "note": "The engineering 2%/2 degree policy is documented separately from the stricter 1%/1 degree audit."
+    },
+    {
+      "id": "interface_motion_substitution_70hz",
+      "kind": "layer_isolation",
+      "status": "completed",
+      "artifacts": [
+        "results/interface_motion_substitution_70hz/summary.json",
+        "results/interface_motion_substitution_70hz/per_boundary_metrics.csv"
+      ]
+    },
+    {
+      "id": "native_fft_crosscheck_70hz",
+      "kind": "signal_processing_crosscheck",
+      "status": "completed",
+      "artifacts": [
+        "results/native_fft_crosscheck_70hz/summary.json",
+        "results/native_fft_crosscheck_70hz/three_level_summary.json"
+      ]
+    },
+    {
+      "id": "spherical_dtn_diagnostic_70hz",
+      "kind": "frequency_boundary_diagnostic",
+      "status": "diagnostic_only",
+      "artifacts": [
+        "results/spherical_dtn_diagnostic_70hz/summary.json",
+        "results/spherical_dtn_diagnostic_70hz/metrics.csv"
+      ],
+      "note": "This does not replace the transient production boundary."
+    },
+    {
+      "id": "tensor_coenergy_pilot_20260801",
+      "kind": "native_magnetic_mesh_gate",
+      "status": "failed_mesh_not_converged",
+      "artifacts": [
+        "results/tensor_coenergy_pilot_20260801/pilot_summary.json",
+        "results/tensor_coenergy_pilot_20260801/pilot_points.csv",
+        "results/tensor_coenergy_pilot_20260801/mesh_convergence.csv",
+        "results/tensor_coenergy_pilot_20260801/experiment_ledger.csv",
+        "results/tensor_coenergy_pilot_20260801/provenance.json",
+        "results/tensor_coenergy_pilot_20260801/status.json"
+      ],
+      "note": "Nine of nine pilot solves converged, but the 0.5% mesh gate failed; no tensor law or tensor transient was generated."
+    },
+    {
+      "id": "multistage_decisions_20260729",
+      "kind": "change_decision_log",
+      "status": "production_default_unchanged",
+      "artifacts": [
+        "decisions/multistage_decisions_20260729.json"
+      ]
+    }
+  ]
+}

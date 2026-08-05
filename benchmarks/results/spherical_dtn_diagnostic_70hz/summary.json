@@ -1,0 +1,96 @@
+{
+  "status": "completed",
+  "purpose": "frequency-only exact spherical DtN diagnostic; not the transient production boundary",
+  "frequency_Hz": 70.0,
+  "radius_m": 0.115001,
+  "rows": [
+    {
+      "lmax": 0,
+      "boundary_dofs": 31,
+      "dtn_l0_real_1_per_m": 8.695576560203822,
+      "dtn_l0_imag_1_per_m": 1.281522089077758,
+      "axis_near_0p10m_amplitude_relative_error": 0.03939393106398779,
+      "axis_near_0p10m_phase_error_deg": -0.15069642954684495,
+      "offaxis_45deg_0p10m_amplitude_relative_error": 0.016531497822199568,
+      "offaxis_45deg_0p10m_phase_error_deg": -0.12442064548672821,
+      "rear_physical_m0p10_amplitude_relative_error": 0.06743872187209822,
+      "rear_physical_m0p10_phase_error_deg": 0.16247147264971817
+    },
+    {
+      "lmax": 1,
+      "boundary_dofs": 31,
+      "dtn_l0_real_1_per_m": 8.695576560203822,
+      "dtn_l0_imag_1_per_m": 1.281522089077758,
+      "axis_near_0p10m_amplitude_relative_error": 0.5119396241224311,
+      "axis_near_0p10m_phase_error_deg": 8.553547046444251,
+      "offaxis_45deg_0p10m_amplitude_relative_error": 0.3962979619530473,
+      "offaxis_45deg_0p10m_phase_error_deg": 6.280504220475537,
+      "rear_physical_m0p10_amplitude_relative_error": 0.5500322685110237,
+      "rear_physical_m0p10_phase_error_deg": 10.540093344293377
+    },
+    {
+      "lmax": 2,
+      "boundary_dofs": 31,
+      "dtn_l0_real_1_per_m": 8.695576560203822,
+      "dtn_l0_imag_1_per_m": 1.281522089077758,
+      "axis_near_0p10m_amplitude_relative_error": 0.5244937056592427,
+      "axis_near_0p10m_phase_error_deg": 8.895139761519681,
+      "offaxis_45deg_0p10m_amplitude_relative_error": 0.39958138209121047,
+      "offaxis_45deg_0p10m_phase_error_deg": 6.343706751358995,
+      "rear_physical_m0p10_amplitude_relative_error": 0.5331403540301376,
+      "rear_physical_m0p10_phase_error_deg": 9.961670745814779
+    },
+    {
+      "lmax": 4,
+      "boundary_dofs": 31,
+      "dtn_l0_real_1_per_m": 8.695576560203822,
+      "dtn_l0_imag_1_per_m": 1.281522089077758,
+      "axis_near_0p10m_amplitude_relative_error": 0.3639271244450332,
+      "axis_near_0p10m_phase_error_deg": 7.091895808294242,
+      "offaxis_45deg_0p10m_amplitude_relative_error": 0.4791558570766731,
+      "offaxis_45deg_0p10m_phase_error_deg": 7.2977872308003695,
+      "rear_physical_m0p10_amplitude_relative_error": 0.2687341946094434,
+      "rear_physical_m0p10_phase_error_deg": 6.648117345345803
+    },
+    {
+      "lmax": 8,
+      "boundary_dofs": 31,
+      "dtn_l0_real_1_per_m": 8.695576560203822,
+      "dtn_l0_imag_1_per_m": 1.281522089077758,
+      "axis_near_0p10m_amplitude_relative_error": 0.43806377450621414,
+      "axis_near_0p10m_phase_error_deg": 7.681225357631061,
+      "offaxis_45deg_0p10m_amplitude_relative_error": 0.4740730691033919,
+      "offaxis_45deg_0p10m_phase_error_deg": 7.3054972307326285,
+      "rear_physical_m0p10_amplitude_relative_error": 0.3633202086774645,
+      "rear_physical_m0p10_phase_error_deg": 7.25137714704203
+    },
+    {
+      "lmax": 12,
+      "boundary_dofs": 31,
+      "dtn_l0_real_1_per_m": 8.695576560203822,
+      "dtn_l0_imag_1_per_m": 1.281522089077758,
+      "axis_near_0p10m_amplitude_relative_error": 0.46461647021907465,
+      "axis_near_0p10m_phase_error_deg": 7.81906409499997,
+      "offaxis_45deg_0p10m_amplitude_relative_error": 0.49982391373569185,
+      "offaxis_45deg_0p10m_phase_error_deg": 7.428140143671518,
+      "rear_physical_m0p10_amplitude_relative_error": 0.38924957695755663,
+      "rear_physical_m0p10_phase_error_deg": 7.363119334399911
+    },
+    {
+      "lmax": 16,
+      "boundary_dofs": 31,
+      "dtn_l0_real_1_per_m": 8.695576560203822,
+      "dtn_l0_imag_1_per_m": 1.281522089077758,
+      "axis_near_0p10m_amplitude_relative_error": 0.4764839365625682,
+      "axis_near_0p10m_phase_error_deg": 7.860882966792053,
+      "offaxis_45deg_0p10m_amplitude_relative_error": 0.5059624058312013,
+      "offaxis_45deg_0p10m_phase_error_deg": 7.451907210525577,
+      "rear_physical_m0p10_amplitude_relative_error": 0.39883750858639505,
+      "rear_physical_m0p10_phase_error_deg": 7.393490575235138
+    }
+  ],
+  "csv": "metrics.csv",
+  "benchmark_id": "spherical_dtn_diagnostic_70hz",
+  "run_date": "2026-07-29",
+  "public_snapshot_note": "This is a frequency-only diagnostic; it is not the transient production boundary."
+}

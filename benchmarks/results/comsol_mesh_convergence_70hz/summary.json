@@ -1,0 +1,101 @@
+{
+  "baseline": "COMSOL baseline (raw_v2)",
+  "variant": "COMSOL refined mesh (raw_v2)",
+  "criteria": "H1 amplitude <=1% and phase <=1 degree",
+  "unavailable_probes": {
+    "python_axis_boundary_actual": "outside one or both COMSOL acoustic domains"
+  },
+  "acceptance": {
+    "coil_current_A": true,
+    "coil_displacement_m": true,
+    "pressure_python_axis_near_actual": false,
+    "pressure_python_offaxis_actual": true,
+    "pressure_common_rear_physical_m0p10": false
+  },
+  "diagnostic_only_signals": [
+    "pressure_python_axis_rear_actual"
+  ],
+  "all_primary_converged": false,
+  "metrics": [
+    {
+      "signal": "coil_current_A",
+      "baseline_H1_peak": 0.5069395835251037,
+      "variant_H1_peak": 0.5074444797314485,
+      "H1_relative_change": 0.000995969189925665,
+      "H1_phase_change_deg": 0.09164407197122104,
+      "baseline_THD": 0.05034037620320125,
+      "variant_THD": 0.05056218204727731,
+      "THD_absolute_percentage_point_change": 0.022180584407606452,
+      "THD_relative_change": 0.004406122099301265
+    },
+    {
+      "signal": "coil_displacement_m",
+      "baseline_H1_peak": 0.0016212420656452132,
+      "variant_H1_peak": 0.0016217256105113115,
+      "H1_relative_change": 0.0002982558103720858,
+      "H1_phase_change_deg": -0.06026963702518321,
+      "baseline_THD": 0.002711529462444046,
+      "variant_THD": 0.002742632682863106,
+      "THD_absolute_percentage_point_change": 0.0031103220419059947,
+      "THD_relative_change": 0.0114707292876047
+    },
+    {
+      "signal": "dynamic_BL_N_A",
+      "baseline_H1_peak": 0.061440520454064014,
+      "variant_H1_peak": 0.06127874830880306,
+      "H1_relative_change": 0.0026329878729120216,
+      "H1_phase_change_deg": 0.0022258755787347294,
+      "baseline_THD": 8.615768502083839,
+      "variant_THD": 8.644336152500047,
+      "THD_absolute_percentage_point_change": 2.856765041620868,
+      "THD_relative_change": 0.0033157402510639892
+    },
+    {
+      "signal": "pressure_python_axis_near_actual",
+      "baseline_H1_peak": 9.263650661291976,
+      "variant_H1_peak": 9.359684442692767,
+      "H1_relative_change": 0.010366731746704045,
+      "H1_phase_change_deg": -0.63969526072262,
+      "baseline_THD": 0.024865402293878527,
+      "variant_THD": 0.024965637742461078,
+      "THD_absolute_percentage_point_change": 0.010023544858255018,
+      "THD_relative_change": 0.004031121129587619
+    },
+    {
+      "signal": "pressure_python_axis_rear_actual",
+      "baseline_H1_peak": 4.516815121792846,
+      "variant_H1_peak": 4.552666097358737,
+      "H1_relative_change": 0.007937224482117146,
+      "H1_phase_change_deg": 3.531196638240104,
+      "baseline_THD": 0.032963655179375,
+      "variant_THD": 0.032972973489012444,
+      "THD_absolute_percentage_point_change": 0.0009318309637441902,
+      "THD_relative_change": 0.000282684356050183
+    },
+    {
+      "signal": "pressure_python_offaxis_actual",
+      "baseline_H1_peak": 9.876295261736452,
+      "variant_H1_peak": 9.950917488125812,
+      "H1_relative_change": 0.00755569010562775,
+      "H1_phase_change_deg": -0.30784040768838566,
+      "baseline_THD": 0.02542247417166387,
+      "variant_THD": 0.025579599802519903,
+      "THD_absolute_percentage_point_change": 0.015712563085603162,
+      "THD_relative_change": 0.0061805798206362355
+    },
+    {
+      "signal": "pressure_common_rear_physical_m0p10",
+      "baseline_H1_peak": 9.999404954185417,
+      "variant_H1_peak": 10.166651129630418,
+      "H1_relative_change": 0.016725612795089124,
+      "H1_phase_change_deg": -0.30031984829503994,
+      "baseline_THD": 0.0240541860691292,
+      "variant_THD": 0.023926676543271044,
+      "THD_absolute_percentage_point_change": 0.012750952585815697,
+      "THD_relative_change": 0.005300928723661986
+    }
+  ],
+  "benchmark_id": "comsol_mesh_convergence_70hz",
+  "run_date": "2026-07-28",
+  "public_snapshot_note": "Raw COMSOL mesh files, solved models, and solver logs are intentionally not included."
+}
