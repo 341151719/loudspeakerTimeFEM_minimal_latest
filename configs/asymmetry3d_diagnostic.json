@@ -1,0 +1,73 @@
+{
+  "analysis_kind": "circumferential_reduced_order_3d_acoustics",
+  "frequency_Hz": 2800.0,
+  "max_mode_order": 6,
+  "air": {
+    "rho0_kg_m3": 1.2041,
+    "c0_m_s": 343.2
+  },
+  "diaphragm": {
+    "outer_radius_m": 0.08,
+    "inner_radius_m": 0.0,
+    "radial_points": 18,
+    "azimuthal_points": 72
+  },
+  "modes": [
+    {
+      "order": 0,
+      "amplitude_m_s_peak": 0.30,
+      "phase_deg": 0.0,
+      "radial_nodes": 1,
+      "edge_taper_power": 0.15
+    },
+    {
+      "order": 1,
+      "cosine_amplitude_m_s_peak": 0.12,
+      "cosine_phase_deg": 25.0,
+      "sine_amplitude_m_s_peak": 0.07,
+      "sine_phase_deg": -20.0,
+      "radial_power": 1.0
+    },
+    {
+      "order": 3,
+      "cosine_amplitude_m_s_peak": 0.24,
+      "cosine_phase_deg": 145.0,
+      "sine_amplitude_m_s_peak": 0.10,
+      "sine_phase_deg": 70.0,
+      "radial_power": 2.0,
+      "radial_nodes": 1,
+      "edge_taper_power": 0.1
+    },
+    {
+      "order": 5,
+      "cosine_amplitude_m_s_peak": 0.13,
+      "cosine_phase_deg": -65.0,
+      "radial_power": 3.0,
+      "radial_nodes": 2
+    }
+  ],
+  "basket": {
+    "spokes": 5,
+    "spoke_width_deg": 13.0,
+    "rotation_deg": 7.0,
+    "open_transmission": 1.0,
+    "blocked_transmission": 0.08,
+    "edge_softness_deg": 1.2
+  },
+  "enclosure": {
+    "enabled": true,
+    "width_m": 0.23,
+    "height_m": 0.285,
+    "depth_m": 0.16,
+    "centre_xy_m": [0.012, -0.008],
+    "divisions": [10, 12, 8]
+  },
+  "observation": {
+    "near_extent_m": 0.18,
+    "near_offset_m": 0.045,
+    "near_points": 65,
+    "far_radius_m": 2.0,
+    "far_polar_points": 37,
+    "far_azimuthal_points": 72
+  }
+}
