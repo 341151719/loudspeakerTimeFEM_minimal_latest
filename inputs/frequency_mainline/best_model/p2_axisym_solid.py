@@ -311,6 +311,8 @@ def complex_stiffness(
     region_matrices: Mapping[str, csr_matrix] | None = None,
     high_frequency_multipliers: Mapping[str, float] | None = None,
     high_frequency_loss_multipliers: Mapping[str, float] | None = None,
+    transition_start_Hz: float = 2500.0,
+    transition_end_Hz: float = 4500.0,
 ) -> csr_matrix:
     if region_matrices is None or freq_Hz is None:
         out = csr_matrix((model.ndof, model.ndof), dtype=complex)
@@ -325,7 +327,9 @@ def complex_stiffness(
     loss_multipliers = {key: 1.0 for key in DEFAULT_HIGH_FREQUENCY_MULTIPLIERS}
     if high_frequency_loss_multipliers:
         loss_multipliers.update(high_frequency_loss_multipliers)
-    h = structure_blend_factor(float(freq_Hz))
+    h = structure_blend_factor(
+        float(freq_Hz), float(transition_start_Hz), float(transition_end_Hz)
+    )
     out = csr_matrix((model.ndof, model.ndof), dtype=complex)
     for dom, K in model.K_by_domain.items():
         if int(dom) in (20, 21, 25):

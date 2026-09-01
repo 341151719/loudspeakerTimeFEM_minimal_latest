@@ -232,10 +232,13 @@ def solve_frequency(
     f = float(freq_Hz)
     w = 2 * math.pi * f
     sf = model.solid.free_dofs
+    structure_cfg = model.config.get("structure", {})
     K = complex_stiffness(
         model.solid, w, f, model.region_stiffness,
-        high_frequency_multipliers=model.config.get("structure", {}).get("high_frequency_stiffness_multipliers_relative_to_reference"),
-        high_frequency_loss_multipliers=model.config.get("structure", {}).get("high_frequency_loss_multipliers_relative_to_reference"),
+        high_frequency_multipliers=structure_cfg.get("high_frequency_stiffness_multipliers_relative_to_reference"),
+        high_frequency_loss_multipliers=structure_cfg.get("high_frequency_loss_multipliers_relative_to_reference"),
+        transition_start_Hz=structure_cfg.get("transition_start_Hz", 2500.0),
+        transition_end_Hz=structure_cfg.get("transition_end_Hz", 4500.0),
     )
     H = (K[sf][:, sf] - w * w * model.solid.M[sf][:, sf]).tocsr()
     Aac, pml_info = model.acoustic_operator.matrix(f, nra_enabled=nra_enabled)

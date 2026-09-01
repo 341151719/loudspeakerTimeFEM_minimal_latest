@@ -1,0 +1,68 @@
+{
+  "design": "three separate 16:9 case posters plus nine separate square stage panels",
+  "cases": {
+    "soft_damped": {
+      "title": "柔软 · 高阻尼",
+      "parameters": "有效刚度 0.75×   /   损耗 2.5×",
+      "stages": {
+        "piston": {
+          "frequency_Hz": 1250.0,
+          "radial_nodes": 0,
+          "source": "../../runs/diaphragm_breakup_comparison_20260901/full_sweep/soft_damped/checkpoints/1250Hz/solid_1250Hz.vtu"
+        },
+        "onset": {
+          "frequency_Hz": 1600.0,
+          "radial_nodes": 1,
+          "source": "../../runs/diaphragm_breakup_comparison_20260901/full_sweep/soft_damped/checkpoints/1600Hz/solid_1600Hz.vtu"
+        },
+        "developed": {
+          "frequency_Hz": 6300.0,
+          "radial_nodes": 9,
+          "source": "../../runs/diaphragm_breakup_comparison_20260901/full_sweep/soft_damped/checkpoints/6300Hz/solid_6300Hz.vtu"
+        }
+      }
+    },
+    "baseline": {
+      "title": "生产基准",
+      "parameters": "有效刚度 1.0×   /   损耗 1.0×",
+      "stages": {
+        "piston": {
+          "frequency_Hz": 1600.0,
+          "radial_nodes": 0,
+          "source": "../../runs/diaphragm_breakup_comparison_20260901/full_sweep/baseline/checkpoints/1600Hz/solid_1600Hz.vtu"
+        },
+        "onset": {
+          "frequency_Hz": 1800.0,
+          "radial_nodes": 1,
+          "source": "../../runs/diaphragm_breakup_comparison_20260901/full_sweep/baseline/checkpoints/1800Hz/solid_1800Hz.vtu"
+        },
+        "developed": {
+          "frequency_Hz": 6300.0,
+          "radial_nodes": 6,
+          "source": "../../runs/diaphragm_breakup_comparison_20260901/full_sweep/baseline/checkpoints/6300Hz/solid_6300Hz.vtu"
+        }
+      }
+    },
+    "stiff_ringing": {
+      "title": "高刚度 · 低阻尼",
+      "parameters": "有效刚度 2.5×   /   损耗 0.075×",
+      "stages": {
+        "piston": {
+          "frequency_Hz": 2500.0,
+          "radial_nodes": 0,
+          "source": "../../runs/diaphragm_breakup_comparison_20260901/full_sweep/stiff_ringing/checkpoints/2500Hz/solid_2500Hz.vtu"
+        },
+        "onset": {
+          "frequency_Hz": 2800.0,
+          "radial_nodes": 1,
+          "source": "../../runs/diaphragm_breakup_comparison_20260901/full_sweep/stiff_ringing/checkpoints/2800Hz/solid_2800Hz.vtu"
+        },
+        "developed": {
+          "frequency_Hz": 8000.0,
+          "radial_nodes": 5,
+          "source": "../../runs/diaphragm_breakup_comparison_20260901/full_sweep/stiff_ringing/checkpoints/8000Hz/solid_8000Hz.vtu"
+        }
+      }
+    }
+  }
+}
