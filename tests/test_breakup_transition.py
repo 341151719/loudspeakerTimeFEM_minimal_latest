@@ -11,6 +11,7 @@ sys.path.insert(0, str(ROOT / "inputs" / "frequency_mainline" / "src"))
 sys.path.insert(0, str(ROOT / "inputs" / "frequency_mainline" / "best_model"))
 
 from p2_axisym_solid import complex_stiffness  # noqa: E402
+from visualization import _pml_flags  # noqa: E402
 
 
 def _minimal_cone_model():
@@ -48,3 +49,8 @@ def test_breakup_diagnostic_can_apply_stiffness_multiplier_full_band():
 
     assert np.isclose(production_transition[0, 0].real, 2.0)
     assert np.isclose(full_band_diagnostic[0, 0].real, 5.0)
+
+
+def test_acoustic_export_marks_only_actual_pml_domains():
+    flags = _pml_flags(np.array([1, 2, 3, 4, 5, 7, 8, 22]))
+    assert flags.tolist() == [1, 0, 0, 0, 1, 0, 0, 0]

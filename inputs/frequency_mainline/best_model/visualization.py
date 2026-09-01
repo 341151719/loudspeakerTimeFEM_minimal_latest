@@ -9,6 +9,7 @@ import pandas as pd
 
 from loudspeaker_axisym_fem.stage4F_hk_refinement import boundary93_hk_samples_recovered
 from loudspeaker_axisym_fem.exterior_field import hk_pressure_from_samples
+from loudspeaker_axisym_fem.stage4C_acoustic_structure import PML_DOMAINS
 
 
 def _complex_columns(prefix: str, x: np.ndarray) -> dict[str, np.ndarray]:
@@ -18,6 +19,11 @@ def _complex_columns(prefix: str, x: np.ndarray) -> dict[str, np.ndarray]:
         f"{prefix}_abs": np.abs(x),
         f"{prefix}_phase_deg": np.angle(x, deg=True),
     }
+
+
+def _pml_flags(domains: np.ndarray) -> np.ndarray:
+    """Map acoustic domain ids to the exported PML marker."""
+    return np.isin(np.asarray(domains, dtype=int), tuple(PML_DOMAINS)).astype(int)
 
 
 def write_solution_files(model, solution, outdir: str | Path) -> dict:
@@ -72,7 +78,7 @@ def write_solution_files(model, solution, outdir: str | Path) -> dict:
         cells.append(("triangle6", pml6))
         if hasattr(model.acoustic_operator, "mixed_triangle6_domains"):
             domains6 = model.acoustic_operator.mixed_triangle6_domains()
-            cell_data.append(np.isin(domains6, (3, 4)).astype(int))
+            cell_data.append(_pml_flags(domains6))
         else:
             cell_data.append(np.ones(len(pml6), int))
     amesh = meshio.Mesh(

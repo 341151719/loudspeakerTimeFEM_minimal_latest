@@ -61,10 +61,20 @@ def _phase_reference(solid_vtu: Path) -> float:
 
 
 def _acoustic_triangles(mesh: meshio.Mesh) -> np.ndarray:
+    """Return the physical acoustic cells, including both diaphragm sides.
+
+    Older checkpoint VTUs mislabeled physical domains 3/4 as PML.  Geometry is
+    therefore the compatibility authority here: the current spherical PML is
+    the outermost 15 mm of the 180 mm acoustic mesh.
+    """
     triangles = []
+    rz = np.asarray(mesh.points[:, :2], dtype=float)
+    outer_radius = float(np.max(np.hypot(rz[:, 0], rz[:, 1])))
+    physical_radius = outer_radius - 0.015
     for index, block in enumerate(mesh.cells):
-        tags = np.asarray(mesh.cell_data["is_PML"][index], dtype=int)
-        cells = np.asarray(block.data[tags == 0], dtype=int)
+        cells = np.asarray(block.data, dtype=int)
+        centroids = np.mean(rz[cells[:, :3]], axis=1)
+        cells = cells[np.hypot(centroids[:, 0], centroids[:, 1]) <= physical_radius + 1e-6]
         if block.type == "triangle":
             triangles.extend(cells.tolist())
         elif block.type == "triangle6":
@@ -95,7 +105,9 @@ def _draw_near_field(ax, acoustic_vtu: Path, solid_vtu: Path, phase: float) -> N
     ax.scatter(sx, sz, s=0.45, color=GOLD, alpha=0.62, linewidths=0)
     ax.scatter(-sx, sz, s=0.45, color=GOLD, alpha=0.62, linewidths=0)
     ax.axvline(0, color="#7f98a8", lw=0.5, alpha=0.35)
-    ax.set(xlim=(-170, 170), ylim=(-165, 170))
+    ax.text(-157, 146, "膜前  FRONT", color="#dceaf0", fontsize=9, fontweight="bold", alpha=0.8)
+    ax.text(-157, -151, "膜后  REAR", color="#dceaf0", fontsize=9, fontweight="bold", alpha=0.8)
+    ax.set(xlim=(-165, 165), ylim=(-165, 165))
     ax.set_aspect("equal")
     ax.axis("off")
     ax.set_facecolor(PANEL_BG)
@@ -150,7 +162,7 @@ def _save_story(outdir: Path, case_key: str, case: dict, stage_info, record: dic
 
     headings = [
         (0.035, "SOURCE", "振膜源面"),
-        (0.345, "NEAR FIELD", "近场干涉"),
+        (0.345, "NEAR FIELD", "膜前 / 膜后近场干涉"),
         (0.725, "FAR FIELD", "远场辐射"),
     ]
     for x, english_heading, chinese in headings:
