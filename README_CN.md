@@ -162,3 +162,89 @@ pilot 的 9/9 个点均求解收敛，但：
 禁止：改生产配置做试验；读取历史 COMSOL 数据作为运行时校正；把诊断辨识参数称为预测；只看求解器残差而忽略网格收敛；用单频/单点改善替代完整回归；覆盖唯一 COMSOL canonical 文件；在输入目录写结果。
 
 一个修改只有同时满足以下条件才算完成：源码和配置隔离清楚；单元测试通过；模型能从本目录独立装配和运行；数值门禁通过；图和机器可读数据齐全；与旧生产基线完成回归；已知限制如实记录；未引入原项目绝对路径或隐藏 COMSOL 运行时依赖。
+
+## 悬挂系统非线性 Kms(q) ROM
+
+本版本增加机械悬挂大信号非线性。广义线圈位移定义为
+
+```text
+q = h^T u,   h = g / BL(0)
+```
+
+其中 `g` 是现有 Lorentz 结构力向量。ROM 采用 Klippel 常用的 secant stiffness 定义
+
+```text
+F_s(q) = Kms(q) q
+Kms(q) / Kms(0) = sum_n c_n [q / q_scale]^n
+```
+
+现有 FEM 已经包含小信号 Spider/Surround 线性刚度，因此生产求解器只加入大信号增量
+
+```text
+Delta F_s(q) = F_s(q) - Kms(0) q
+```
+
+从而 `Delta F_s(0)=0` 且 `d Delta F_s/dq|0=0`，不改变已验证的小信号 FEM 切线。
+Newton 中必须使用 incremental stiffness
+
+```text
+dF_s/dq = Kms(q) + q dKms/dq
+```
+
+而不是直接使用 secant `Kms(q)`。
+
+机械切线与现有 `BL(q)` 切线沿同一个广义方向 `h h^T`，因此可以合并：
+
+```text
+A_t = A - [ i dBL/dq - d(Delta F_s)/dq ] h h^T
+```
+
+仍然只需要一次基础稀疏 LU 和一个 Sherman-Morrison rank-1 更新，不需要每个 Newton 步重组/重分解完整结构矩阵。
+
+生产配置示例：
+
+```text
+configs/transient_70Hz_nonlinear_comsol_physical_abc_kms_rom.json
+```
+
+ROM 示例：
+
+```text
+inputs/suspension_kms_rom_example.json
+```
+
+默认参考刚度不是整个结构的总等效刚度，而是先用单位广义力得到静态 Ritz 形状，再对 Spider/Surround 域做能量投影：
+
+```text
+Kms,0 = sum_{d in suspension} phi^T K_d phi
+```
+
+当前网格中默认使用结构域 `20`（Spider/Cloth）和 `25`（Surround/Foam）。这两个域贡献约 99.55% 的低频广义结构刚度。
+
+### 从 Klippel Kms(x) 表格拟合 ROM
+
+提供工具：
+
+```bash
+python tools/fit_suspension_kms_rom.py measured_kms.csv \
+  --x-column x_mm \
+  --kms-column Kms_N_per_mm \
+  --order 4 \
+  --out inputs/suspension_kms_rom_measured.json
+```
+
+工具强制 `Kms(0)` 归一化为 1，并输出拟合 RMS/最大误差。生产闭环对标时应先校准 FEM 小信号悬挂刚度到实测 `Kms(0)`，再用归一化曲线描述大信号变化；否则不要把“曲线形状对标”误写成“绝对 Kms 1:1 对标”。
+
+### 诊断配置
+
+```text
+configs/diagnostic_70Hz_linearized_magnetic.json
+configs/diagnostic_70Hz_kms_symmetric_only.json
+configs/diagnostic_70Hz_kms_asymmetric_only.json
+configs/diagnostic_70Hz_kms_symmetric_only_5V.json
+configs/diagnostic_70Hz_kms_asymmetric_only_5V.json
+configs/diagnostic_70Hz_baseline_0p1V.json
+configs/diagnostic_70Hz_kms_rom_0p1V.json
+```
+
+这些配置用于分别检查：线性回归、对称硬化产生 H3、非对称刚度产生 H2/DC offset、弱非线性幅值标度，以及 Kms 与 BL(x)/L(i) 共存时的谐波相消/增强。

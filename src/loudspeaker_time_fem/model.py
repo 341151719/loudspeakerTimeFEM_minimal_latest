@@ -8,6 +8,7 @@ from typing import Any
 
 import numpy as np
 from scipy.sparse import bmat, coo_matrix, csr_matrix, diags
+from scipy.sparse.linalg import splu
 
 from .config import resolve_base_mainline
 
@@ -45,6 +46,7 @@ class TransientModel:
     probes: ProbeMap
     pml_sigma_by_pressure_dof: np.ndarray
     nonlinear_law: Any | None
+    suspension_law: Any | None
     metadata: dict[str, Any]
 
 
@@ -506,6 +508,84 @@ def build_transient_model(config: dict[str, Any], config_path: Path) -> Transien
             )
         ],
     }
+    suspension_law = None
+    suspension_cfg = config.get("mechanical_nonlinearity", {})
+    if bool(suspension_cfg.get("enabled", False)):
+        from .suspension_rom import SuspensionROM
+
+        bl_for_coordinate = float(bl)
+        if abs(bl_for_coordinate) <= 1e-12:
+            raise RuntimeError("cannot define suspension generalized coordinate because BL is zero")
+        h_susp = force / bl_for_coordinate
+        reference_mode = str(
+            suspension_cfg.get("reference_stiffness_mode", "linear_fem_suspension_regions")
+        )
+        static_solution = splu(Ks.tocsc()).solve(h_susp)
+        total_compliance_m_N = float(h_susp @ static_solution)
+        if total_compliance_m_N <= 0.0:
+            raise RuntimeError("linear FEM generalized compliance must be positive")
+        total_generalized_stiffness = 1.0 / total_compliance_m_N
+        static_ritz_shape = static_solution / total_compliance_m_N
+        region_contributions: dict[int, float] = {}
+        if reference_mode == "linear_fem_suspension_regions":
+            suspension_domains = [int(v) for v in suspension_cfg.get("suspension_domain_ids", [20, 25])]
+            for domain in suspension_domains:
+                if domain not in solid.K_by_domain:
+                    raise KeyError(f"suspension domain {domain} is absent from structural FEM")
+                k_domain = solid.K_by_domain[domain][sf][:, sf]
+                region_contributions[domain] = float(
+                    static_ritz_shape @ (k_domain @ static_ritz_shape)
+                )
+            reference_stiffness = float(sum(region_contributions.values()))
+            if reference_stiffness <= 0.0:
+                raise RuntimeError("projected suspension-region stiffness must be positive")
+            compliance_m_N = 1.0 / reference_stiffness
+            reference_source = (
+                "static Ritz projection sum(phi^T K_domain phi) over suspension domains "
+                + str(suspension_domains)
+            )
+        elif reference_mode == "linear_fem_static_compliance":
+            reference_stiffness = total_generalized_stiffness
+            compliance_m_N = total_compliance_m_N
+            reference_source = "1/(h^T Ks^-1 h) from assembled linear FEM"
+            suspension_domains = []
+        elif reference_mode == "explicit":
+            reference_stiffness = float(suspension_cfg["reference_stiffness_N_m"])
+            compliance_m_N = 1.0 / reference_stiffness
+            reference_source = "explicit config value"
+            suspension_domains = []
+        else:
+            raise ValueError(
+                "mechanical_nonlinearity.reference_stiffness_mode must be "
+                "'linear_fem_suspension_regions', 'linear_fem_static_compliance' or 'explicit'"
+            )
+        suspension_path = Path(suspension_cfg["law"])
+        if not suspension_path.is_absolute():
+            suspension_path = config_path.parent.parent / suspension_path
+        suspension_law = SuspensionROM.from_json(
+            suspension_path, reference_stiffness_N_m=reference_stiffness
+        )
+        metadata["mechanical_nonlinearity"] = {
+            **suspension_cfg,
+            **suspension_law.diagnostics(),
+            "reference_stiffness_source": reference_source,
+            "reference_compliance_equivalent_m_N": compliance_m_N,
+            "linear_fem_total_generalized_stiffness_N_m": total_generalized_stiffness,
+            "linear_fem_total_compliance_m_N": total_compliance_m_N,
+            "suspension_domain_ids": suspension_domains,
+            "suspension_region_stiffness_contributions_N_m": {
+                str(domain): value for domain, value in region_contributions.items()
+            },
+            "suspension_fraction_of_generalized_stiffness": (
+                reference_stiffness / total_generalized_stiffness
+                if reference_mode == "linear_fem_suspension_regions" else None
+            ),
+            "coordinate_definition": "q = h^T u, h = Lorentz force vector / BL(0)",
+            "force_contract": "F_s(q)=Kms(q)q; FEM receives DeltaF=F_s-Kms(0)q",
+            "tangent_contract": "dDeltaF/dq=d[Kms(q)q]/dq-Kms(0)",
+            "small_signal_preservation": "DeltaF(0)=0 and dDeltaF/dq|0=0",
+        }
+
     nonlinear_law = None
     nonlinear_cfg = config.get("nonlinear", {})
     if bool(nonlinear_cfg.get("enabled", False)):
@@ -549,6 +629,8 @@ def build_transient_model(config: dict[str, Any], config_path: Path) -> Transien
             "current_limit_A": nonlinear_law.current_limit_A,
             "coenergy_contract": coenergy_contract,
         }
+    if suspension_law is not None:
+        metadata["formulation"] = metadata["formulation"] + "_with_suspension_Kms_ROM"
     return TransientModel(
         config=config,
         config_path=config_path,
@@ -571,5 +653,6 @@ def build_transient_model(config: dict[str, Any], config_path: Path) -> Transien
         probes=probes,
         pml_sigma_by_pressure_dof=sigma_all[pf],
         nonlinear_law=nonlinear_law,
+        suspension_law=suspension_law,
         metadata=metadata,
     )

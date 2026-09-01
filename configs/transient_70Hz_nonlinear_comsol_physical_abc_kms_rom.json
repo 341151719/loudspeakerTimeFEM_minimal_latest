@@ -1,0 +1,13 @@
+{
+  "extends": "transient_70Hz_nonlinear_comsol_physical_abc.json",
+  "model_name": "Python nonlinear transient - magnetic nonlinearities + suspension Kms(q) ROM",
+  "mechanical_nonlinearity": {
+    "enabled": true,
+    "law": "inputs/suspension_kms_rom_example.json",
+    "reference_stiffness_mode": "linear_fem_suspension_regions",
+    "suspension_domain_ids": [20, 25],
+    "solver_integration": "combined_rank_one_Sherman_Morrison",
+    "coordinate": "coil generalized displacement q=h^T u",
+    "small_signal_policy": "incremental correction preserves assembled FEM tangent at q=0"
+  }
+}

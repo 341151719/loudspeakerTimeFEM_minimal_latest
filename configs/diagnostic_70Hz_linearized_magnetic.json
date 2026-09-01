@@ -1,0 +1,9 @@
+{
+  "extends": "transient_70Hz_nonlinear_comsol_physical_abc.json",
+  "model_name": "Diagnostic - magnetic law linearized, no Kms ROM",
+  "nonlinear": {
+    "dynamic_BL_enabled": false,
+    "nonlinear_inductance_enabled": false,
+    "coupled_coenergy_enabled": false
+  }
+}

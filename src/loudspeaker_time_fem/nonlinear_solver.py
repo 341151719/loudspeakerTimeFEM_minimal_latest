@@ -11,6 +11,24 @@ from .solver import TransientResult, _fit_harmonic, drive_voltage
 from .tensor_coenergy import TensorCoenergyLaw
 
 
+def _suspension_rom_terms(model: TransientModel, q_m: float) -> tuple[float, float, float, float, float]:
+    """Return (correction force, correction tangent, potential correction, Kms secant, Kms tangent).
+
+    The assembled FEM already supplies the small-signal linear stiffness.  The
+    ROM therefore contributes only the nonlinear deviation from that tangent.
+    """
+    law = model.suspension_law
+    if law is None:
+        return 0.0, 0.0, 0.0, 0.0, 0.0
+    return (
+        float(law.correction_force(q_m)),
+        float(law.correction_tangent(q_m)),
+        float(law.correction_potential(q_m)),
+        float(law.secant_stiffness(q_m)),
+        float(law.tangent_stiffness(q_m)),
+    )
+
+
 def tensor_newton_residual_jacobian(
     law: TensorCoenergyLaw,
     effective: np.ndarray,
@@ -118,12 +136,23 @@ def _solve_tensor_coenergy_transient(
     incremental_l = np.zeros(n_steps + 1, dtype=float)
     force_xx = np.zeros(n_steps + 1, dtype=float)
     force_xi = np.zeros(n_steps + 1, dtype=float)
+    suspension_enabled = model.suspension_law is not None
+    suspension_force = np.zeros(n_steps + 1, dtype=float) if suspension_enabled else None
+    suspension_secant = np.zeros(n_steps + 1, dtype=float) if suspension_enabled else None
+    suspension_tangent = np.zeros(n_steps + 1, dtype=float) if suspension_enabled else None
+    suspension_correction = np.zeros(n_steps + 1, dtype=float) if suspension_enabled else None
+    suspension_energy = np.zeros(n_steps + 1, dtype=float) if suspension_enabled else None
+    sm_denominator = np.ones(n_steps + 1, dtype=float)
     energy = np.zeros((n_steps + 1, 5), dtype=float)
     balance = np.zeros((n_steps + 1, 8), dtype=float)
     iterations = np.zeros(n_steps + 1, dtype=int)
     newton_residual = np.zeros(n_steps + 1, dtype=float)
     gap_margin = np.ones(n_steps + 1, dtype=float)
     gap_half_width = float(ncfg.get("ale_gap_half_width_m", law.displacement_limit_m))
+    q_limit = min(
+        law.displacement_limit_m,
+        model.suspension_law.displacement_limit_m if suspension_enabled else law.displacement_limit_m,
+    )
     Ms = model.M[:ns, :ns]
     Ks = model.K[:ns, :ns]
     Cs = model.C[:ns, :ns]
@@ -162,9 +191,18 @@ def _solve_tensor_coenergy_transient(
         incremental_l[index] = L
         force_xx[index] = float(law.dforce_dx(q, i))
         force_xi[index] = float(law.dforce_di(q, i))
+        corr_force, corr_tangent, corr_potential, kms_secant, kms_tangent = _suspension_rom_terms(model, q)
+        if suspension_enabled:
+            suspension_force[index] = float(model.suspension_law.restoring_force(q))
+            suspension_secant[index] = kms_secant
+            suspension_tangent[index] = kms_tangent
+            suspension_correction[index] = corr_force
+            suspension_energy[index] = corr_potential
+        rank_coefficient = force_xx[index] - corr_tangent
+        sm_denominator[index] = 1.0 - rank_coefficient * h_inverse_h
         gap_margin[index] = 1.0 - abs(q) / gap_half_width
         kinetic = 0.5 * float(vu @ (Ms @ vu))
-        potential = 0.5 * float(u @ (Ks @ u))
+        potential = 0.5 * float(u @ (Ks @ u)) + corr_potential
         magnetic = float(law.magnetic_energy(q, i))
         copper = model.R_ohm * i * i
         damping = float(vu @ (Cs @ vu))
@@ -214,7 +252,8 @@ def _solve_tensor_coenergy_transient(
                 raise RuntimeError(
                     f"W_ii 非正，拒绝 Newton: x={q:.9g}, i={i_guess:.9g}, L={Ldiff:.9g}"
                 )
-            residual_mech = effective @ x_guess - rhs_mech - hfull * F
+            corr_force, corr_tangent, _, _, _ = _suspension_rom_terms(model, q)
+            residual_mech = effective @ x_guess - rhs_mech - hfull * F + hfull * corr_force
             residual_electric = (
                 0.5 * model.R_ohm * (i_guess + current[step])
                 + (psi - flux_previous) / dt
@@ -227,13 +266,16 @@ def _solve_tensor_coenergy_transient(
             if final_relative < newton_tol:
                 converged = True
                 break
-            denominator = 1.0 - F_x * h_inverse_h
+            # Mechanical Newton block is A - (F_x - dDeltaF_s/dq) h h^T.
+            # Electromagnetic and suspension nonlinearities therefore remain one rank-1 update.
+            rank_coefficient = F_x - corr_tangent
+            denominator = 1.0 - rank_coefficient * h_inverse_h
             if abs(denominator) < 1e-10:
-                raise RuntimeError("W_xx 结构 Sherman--Morrison 分母接近零")
+                raise RuntimeError("combined magnetic/Kms Sherman--Morrison denominator near zero")
 
             def solve_tangent(rhs: np.ndarray) -> np.ndarray:
                 base = lu.solve(rhs)
-                return base + F_x * inverse_h * float(hfull @ base) / denominator
+                return base + rank_coefficient * inverse_h * float(hfull @ base) / denominator
 
             y = solve_tangent(-residual_mech)
             z = F_i * inverse_h / denominator
@@ -249,12 +291,12 @@ def _solve_tensor_coenergy_transient(
             for _ in range(24):
                 q_trial = float(h @ (x_guess[:ns] + scale * delta_x[:ns]))
                 i_trial = i_guess + scale * delta_i
-                if abs(q_trial) <= law.displacement_limit_m and abs(i_trial) <= law.current_limit_A:
+                if abs(q_trial) <= q_limit and abs(i_trial) <= law.current_limit_A:
                     valid_trial = True
                     break
                 scale *= 0.5
             if not valid_trial:
-                raise RuntimeError("Newton 步无法保持磁律坐标在声明域内")
+                raise RuntimeError("Newton step cannot keep magnetic/suspension coordinates inside declared range")
             x_guess += scale * delta_x
             i_guess += scale * delta_i
         if not converged:
@@ -315,6 +357,16 @@ def _solve_tensor_coenergy_transient(
         "newton_residual_max": float(np.max(newton_residual)),
         "ale_gap_margin_min": float(np.min(gap_margin)),
         "energy_balance_residual_max_W": float(np.max(np.abs(balance[:, 7]))),
+        "suspension_Kms_ROM_enabled": suspension_enabled,
+        "sherman_morrison_denominator_min_abs": float(np.min(np.abs(sm_denominator))),
+        **(
+            {
+                "Kms_secant_min_max_N_m": [float(np.min(suspension_secant)), float(np.max(suspension_secant))],
+                "Kms_tangent_min_max_N_m": [float(np.min(suspension_tangent)), float(np.max(suspension_tangent))],
+                "suspension_restoring_force_min_max_N": [float(np.min(suspension_force)), float(np.max(suspension_force))],
+            }
+            if suspension_enabled else {}
+        ),
     }
     return TransientResult(
         time_s=times,
@@ -348,6 +400,12 @@ def _solve_tensor_coenergy_transient(
         dforce_di_N_A=force_xi,
         newton_residual=newton_residual,
         energy_balance_W=balance,
+        suspension_restoring_force_N=suspension_force,
+        suspension_secant_stiffness_N_m=suspension_secant,
+        suspension_tangent_stiffness_N_m=suspension_tangent,
+        suspension_correction_force_N=suspension_correction,
+        suspension_correction_energy_J=suspension_energy,
+        sherman_morrison_denominator=sm_denominator,
     )
 
 
@@ -432,9 +490,20 @@ def solve_nonlinear_transient(model: TransientModel) -> TransientResult:
     energy = np.zeros((n_steps + 1, 5))
     dynamic_bl = np.full(n_steps + 1, bl0)
     incremental_l = np.full(n_steps + 1, linear_inductance)
+    suspension_enabled = model.suspension_law is not None
+    suspension_force = np.zeros(n_steps + 1, dtype=float) if suspension_enabled else None
+    suspension_secant = np.zeros(n_steps + 1, dtype=float) if suspension_enabled else None
+    suspension_tangent = np.zeros(n_steps + 1, dtype=float) if suspension_enabled else None
+    suspension_correction = np.zeros(n_steps + 1, dtype=float) if suspension_enabled else None
+    suspension_energy = np.zeros(n_steps + 1, dtype=float) if suspension_enabled else None
+    sm_denominator = np.ones(n_steps + 1, dtype=float)
     iterations = np.zeros(n_steps + 1, dtype=int)
     gap_margin = np.ones(n_steps + 1)
     gap_half_width = float(ncfg.get("ale_gap_half_width_m", law.displacement_limit_m))
+    q_limit = min(
+        law.displacement_limit_m,
+        model.suspension_law.displacement_limit_m if suspension_enabled else law.displacement_limit_m,
+    )
     Ms = model.M[:ns, :ns]
     Ks = model.K[:ns, :ns]
     Cs = model.C[:ns, :ns]
@@ -460,10 +529,19 @@ def solve_nonlinear_transient(model: TransientModel) -> TransientResult:
         coil_a[index] = float(h @ acceleration[:ns])
         dynamic_bl[index] = bl_value(q, current[index])
         incremental_l[index] = differential_inductance(current[index])
+        corr_force, corr_tangent, corr_potential, kms_secant, kms_tangent = _suspension_rom_terms(model, q)
+        if suspension_enabled:
+            suspension_force[index] = float(model.suspension_law.restoring_force(q))
+            suspension_secant[index] = kms_secant
+            suspension_tangent[index] = kms_tangent
+            suspension_correction[index] = corr_force
+            suspension_energy[index] = corr_potential
+        rank_coefficient = current[index] * bl_derivative(q) - corr_tangent
+        sm_denominator[index] = 1.0 - rank_coefficient * h_inverse_h
         gap_margin[index] = 1.0 - abs(q) / gap_half_width
         energy[index] = [
             0.5 * float(vu @ (Ms @ vu)),
-            0.5 * float(u @ (Ks @ u)),
+            0.5 * float(u @ (Ks @ u)) + corr_potential,
             float(
                 0.5 * linear_inductance * current[index] ** 2
                 if not nonlinear_inductance_enabled
@@ -523,7 +601,8 @@ def solve_nonlinear_transient(model: TransientModel) -> TransientResult:
                 if coupled_coenergy_enabled
                 else 0.0
             )
-            residual_mech = effective @ x_guess - rhs_mech - hfull * bl * i_guess
+            corr_force, corr_tangent, _, _, _ = _suspension_rom_terms(model, q)
+            residual_mech = effective @ x_guess - rhs_mech - hfull * bl * i_guess + hfull * corr_force
             residual_electric = (
                 0.5 * model.R_ohm * (i_guess + current[step])
                 + (flux - flux_previous) / dt
@@ -539,7 +618,9 @@ def solve_nonlinear_transient(model: TransientModel) -> TransientResult:
                 converged = True
                 break
 
-            rank_coefficient = i_guess * dbl
+            # A + dDeltaF_s/dq*h*h^T - i*dBL/dq*h*h^T
+            # = A - rank_coefficient*h*h^T, retaining one Sherman-Morrison update.
+            rank_coefficient = i_guess * dbl - corr_tangent
             denominator = 1.0 - rank_coefficient * h_inverse_h
             if abs(denominator) < 1e-10:
                 raise RuntimeError("非线性结构切线的 Sherman-Morrison 分母接近零")
@@ -569,7 +650,7 @@ def solve_nonlinear_transient(model: TransientModel) -> TransientResult:
                 q_trial = float(h @ (x_guess[:ns] + scale * delta_x[:ns]))
                 i_trial = i_guess + scale * delta_i
                 if (
-                    abs(q_trial) <= 0.999 * law.displacement_limit_m
+                    abs(q_trial) <= 0.999 * q_limit
                     and abs(i_trial) <= 0.999 * law.current_limit_A
                 ):
                     break
@@ -634,6 +715,16 @@ def solve_nonlinear_transient(model: TransientModel) -> TransientResult:
         "newton_iterations_max": int(iterations.max()),
         "newton_iterations_mean": float(iterations[1:].mean()),
         "ale_gap_margin_min": float(gap_margin.min()),
+        "suspension_Kms_ROM_enabled": suspension_enabled,
+        "sherman_morrison_denominator_min_abs": float(np.min(np.abs(sm_denominator))),
+        **(
+            {
+                "Kms_secant_min_max_N_m": [float(np.min(suspension_secant)), float(np.max(suspension_secant))],
+                "Kms_tangent_min_max_N_m": [float(np.min(suspension_tangent)), float(np.max(suspension_tangent))],
+                "suspension_restoring_force_min_max_N": [float(np.min(suspension_force)), float(np.max(suspension_force))],
+            }
+            if suspension_enabled else {}
+        ),
     }
     return TransientResult(
         time_s=times,
@@ -659,4 +750,10 @@ def solve_nonlinear_transient(model: TransientModel) -> TransientResult:
             "steps": float(n_steps),
             "dt_s": dt,
         },
+        suspension_restoring_force_N=suspension_force,
+        suspension_secant_stiffness_N_m=suspension_secant,
+        suspension_tangent_stiffness_N_m=suspension_tangent,
+        suspension_correction_force_N=suspension_correction,
+        suspension_correction_energy_J=suspension_energy,
+        sherman_morrison_denominator=sm_denominator,
     )
