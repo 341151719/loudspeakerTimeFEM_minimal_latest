@@ -1,0 +1,20 @@
+{
+  "extends": "best_model.json",
+  "model_name": "Breakup comparison - compliant high-damping cone",
+  "structure": {
+    "transition_start_Hz": 0.0,
+    "transition_end_Hz": 1.0,
+    "high_frequency_stiffness_multipliers_relative_to_reference": {
+      "cone_1": 0.75,
+      "cone_2": 0.75,
+      "cone_3": 0.75,
+      "cone_4": 0.75
+    },
+    "high_frequency_loss_multipliers_relative_to_reference": {
+      "cone_1": 2.5,
+      "cone_2": 2.5,
+      "cone_3": 2.5,
+      "cone_4": 2.5
+    }
+  }
+}
