@@ -116,6 +116,13 @@ def export_result(model: TransientModel, result: TransientResult, outdir: str | 
         time_frame["dforce_dx_N_m"] = result.dforce_dx_N_m
         time_frame["dforce_di_N_A"] = result.dforce_di_N_A
         time_frame["newton_residual"] = result.newton_residual
+    if result.suspension_restoring_force_N is not None:
+        time_frame["suspension_restoring_force_N"] = result.suspension_restoring_force_N
+        time_frame["Kms_secant_N_m"] = result.suspension_secant_stiffness_N_m
+        time_frame["Kms_incremental_N_m"] = result.suspension_tangent_stiffness_N_m
+        time_frame["suspension_nonlinear_correction_force_N"] = result.suspension_correction_force_N
+        time_frame["suspension_nonlinear_correction_energy_J"] = result.suspension_correction_energy_J
+        time_frame["sherman_morrison_denominator"] = result.sherman_morrison_denominator
     time_path = out / "all_probes_timeseries.csv"
     time_frame.to_csv(time_path, index=False, float_format=float_format)
 
@@ -167,6 +174,23 @@ def export_result(model: TransientModel, result: TransientResult, outdir: str | 
         energy_frame.to_csv(energy_path, index=False, float_format=float_format)
         extra_paths.append(energy_path)
 
+    if result.suspension_restoring_force_N is not None:
+        suspension_frame = pd.DataFrame(
+            {
+                "t_s": result.time_s,
+                "x_m": result.coil_displacement_m,
+                "restoring_force_N": result.suspension_restoring_force_N,
+                "Kms_secant_N_m": result.suspension_secant_stiffness_N_m,
+                "Kms_incremental_N_m": result.suspension_tangent_stiffness_N_m,
+                "nonlinear_correction_force_N": result.suspension_correction_force_N,
+                "nonlinear_correction_energy_J": result.suspension_correction_energy_J,
+                "sherman_morrison_denominator": result.sherman_morrison_denominator,
+            }
+        )
+        suspension_path = out / "suspension_rom_timeseries.csv"
+        suspension_frame.to_csv(suspension_path, index=False, float_format=float_format)
+        extra_paths.append(suspension_path)
+
     f0 = float(model.config["drive"]["frequency_Hz"])
     steps_per_period = int(model.config["time"]["steps_per_period"])
     last_cycles = int(model.config["export"].get("last_cycles_for_spectrum", 1))
@@ -185,6 +209,19 @@ def export_result(model: TransientModel, result: TransientResult, outdir: str | 
     spectrum.to_csv(spectrum_path, index=False, float_format=float_format)
 
     snapshot_path = out / "field_snapshots.npz"
+    suspension_snapshot = {}
+    if result.suspension_restoring_force_N is not None:
+        suspension_snapshot = {
+            "suspension_restoring_force_N": np.interp(
+                result.snapshot_times_s, result.time_s, result.suspension_restoring_force_N
+            ),
+            "Kms_secant_N_m": np.interp(
+                result.snapshot_times_s, result.time_s, result.suspension_secant_stiffness_N_m
+            ),
+            "Kms_incremental_N_m": np.interp(
+                result.snapshot_times_s, result.time_s, result.suspension_tangent_stiffness_N_m
+            ),
+        }
     np.savez_compressed(
         snapshot_path,
         time_s=result.snapshot_times_s,
@@ -203,6 +240,7 @@ def export_result(model: TransientModel, result: TransientResult, outdir: str | 
         incremental_inductance_H=np.interp(
             result.snapshot_times_s, result.time_s, result.incremental_inductance_H
         ),
+        **suspension_snapshot,
     )
     summary = {
         "status": "completed",
@@ -257,11 +295,43 @@ def export_result(model: TransientModel, result: TransientResult, outdir: str | 
             if result.magnetic_flux_Wb is not None
             else None
         ),
+        "mechanical_nonlinearity_diagnostics": (
+            {
+                "Kms_secant_min_max_N_m": [
+                    float(np.min(result.suspension_secant_stiffness_N_m)),
+                    float(np.max(result.suspension_secant_stiffness_N_m)),
+                ],
+                "Kms_incremental_min_max_N_m": [
+                    float(np.min(result.suspension_tangent_stiffness_N_m)),
+                    float(np.max(result.suspension_tangent_stiffness_N_m)),
+                ],
+                "restoring_force_min_max_N": [
+                    float(np.min(result.suspension_restoring_force_N)),
+                    float(np.max(result.suspension_restoring_force_N)),
+                ],
+                "nonlinear_correction_force_min_max_N": [
+                    float(np.min(result.suspension_correction_force_N)),
+                    float(np.max(result.suspension_correction_force_N)),
+                ],
+                "correction_energy_min_max_J": [
+                    float(np.min(result.suspension_correction_energy_J)),
+                    float(np.max(result.suspension_correction_energy_J)),
+                ],
+                "sherman_morrison_denominator_min_abs": float(
+                    np.min(np.abs(result.sherman_morrison_denominator))
+                ),
+                "small_signal_tangent_preserved": True,
+            }
+            if result.suspension_restoring_force_N is not None
+            else None
+        ),
         "scope": {
             "implemented": (
-                "native tensor coenergy W(x,i), consistent Newton derivatives and moving-winding diagnostic ROM"
+                "native tensor coenergy W(x,i), consistent Newton derivatives, moving-winding diagnostic ROM"
+                + (" and conservative suspension Kms(q) ROM" if model.suspension_law is not None else "")
                 if result.magnetic_flux_Wb is not None
                 else "field-derived nonlinear magnetic coenergy and moving-coil ALE ROM"
+                + (" with conservative suspension Kms(q) ROM" if model.suspension_law is not None else "")
                 if model.nonlinear_law is not None
                 else "linear transient structure-acoustic-electric coupling"
             ),

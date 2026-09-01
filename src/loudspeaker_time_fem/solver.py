@@ -39,6 +39,12 @@ class TransientResult:
     dforce_di_N_A: np.ndarray | None = None
     newton_residual: np.ndarray | None = None
     energy_balance_W: np.ndarray | None = None
+    suspension_restoring_force_N: np.ndarray | None = None
+    suspension_secant_stiffness_N_m: np.ndarray | None = None
+    suspension_tangent_stiffness_N_m: np.ndarray | None = None
+    suspension_correction_force_N: np.ndarray | None = None
+    suspension_correction_energy_J: np.ndarray | None = None
+    sherman_morrison_denominator: np.ndarray | None = None
 
 
 def soft_start(t_s: np.ndarray | float, duration_s: float) -> np.ndarray:
