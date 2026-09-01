@@ -1,0 +1,100 @@
+{
+  "scope": "separate breakup source, FEM near-field, and HK far-field stories; no trend curves",
+  "normalization": {
+    "source": "phase-aligned and independently normalized",
+    "near_field": "instantaneous pressure phase-aligned to the coil; clipped at physical-node 98.5 percentile",
+    "far_field": "relative magnitude with a -30 dB visual floor"
+  },
+  "outputs": [
+    {
+      "case": "soft_damped",
+      "stage": "piston",
+      "frequency_Hz": 1250.0,
+      "png": "../../visualizations/diaphragm_breakup_parameter_study_20260901/acoustic_impact/soft_damped/soft_damped_piston_1250Hz_acoustic_impact.png",
+      "svg": "../../visualizations/diaphragm_breakup_parameter_study_20260901/acoustic_impact/soft_damped/soft_damped_piston_1250Hz_acoustic_impact.svg",
+      "solid_vtu": "../../runs/diaphragm_breakup_comparison_20260901/full_sweep/soft_damped/checkpoints/1250Hz/solid_1250Hz.vtu",
+      "acoustic_vtu": "../../runs/diaphragm_breakup_comparison_20260901/full_sweep/soft_damped/checkpoints/1250Hz/acoustic_1250Hz.vtu",
+      "directivity_csv": "../../runs/diaphragm_breakup_comparison_20260901/full_sweep/soft_damped/checkpoints/1250Hz/directivity_1250Hz.csv"
+    },
+    {
+      "case": "soft_damped",
+      "stage": "onset",
+      "frequency_Hz": 1600.0,
+      "png": "../../visualizations/diaphragm_breakup_parameter_study_20260901/acoustic_impact/soft_damped/soft_damped_onset_1600Hz_acoustic_impact.png",
+      "svg": "../../visualizations/diaphragm_breakup_parameter_study_20260901/acoustic_impact/soft_damped/soft_damped_onset_1600Hz_acoustic_impact.svg",
+      "solid_vtu": "../../runs/diaphragm_breakup_comparison_20260901/full_sweep/soft_damped/checkpoints/1600Hz/solid_1600Hz.vtu",
+      "acoustic_vtu": "../../runs/diaphragm_breakup_comparison_20260901/full_sweep/soft_damped/checkpoints/1600Hz/acoustic_1600Hz.vtu",
+      "directivity_csv": "../../runs/diaphragm_breakup_comparison_20260901/full_sweep/soft_damped/checkpoints/1600Hz/directivity_1600Hz.csv"
+    },
+    {
+      "case": "soft_damped",
+      "stage": "developed",
+      "frequency_Hz": 6300.0,
+      "png": "../../visualizations/diaphragm_breakup_parameter_study_20260901/acoustic_impact/soft_damped/soft_damped_developed_6300Hz_acoustic_impact.png",
+      "svg": "../../visualizations/diaphragm_breakup_parameter_study_20260901/acoustic_impact/soft_damped/soft_damped_developed_6300Hz_acoustic_impact.svg",
+      "solid_vtu": "../../runs/diaphragm_breakup_comparison_20260901/full_sweep/soft_damped/checkpoints/6300Hz/solid_6300Hz.vtu",
+      "acoustic_vtu": "../../runs/diaphragm_breakup_comparison_20260901/full_sweep/soft_damped/checkpoints/6300Hz/acoustic_6300Hz.vtu",
+      "directivity_csv": "../../runs/diaphragm_breakup_comparison_20260901/full_sweep/soft_damped/checkpoints/6300Hz/directivity_6300Hz.csv"
+    },
+    {
+      "case": "baseline",
+      "stage": "piston",
+      "frequency_Hz": 1600.0,
+      "png": "../../visualizations/diaphragm_breakup_parameter_study_20260901/acoustic_impact/baseline/baseline_piston_1600Hz_acoustic_impact.png",
+      "svg": "../../visualizations/diaphragm_breakup_parameter_study_20260901/acoustic_impact/baseline/baseline_piston_1600Hz_acoustic_impact.svg",
+      "solid_vtu": "../../runs/diaphragm_breakup_comparison_20260901/full_sweep/baseline/checkpoints/1600Hz/solid_1600Hz.vtu",
+      "acoustic_vtu": "../../runs/diaphragm_breakup_comparison_20260901/full_sweep/baseline/checkpoints/1600Hz/acoustic_1600Hz.vtu",
+      "directivity_csv": "../../runs/diaphragm_breakup_comparison_20260901/full_sweep/baseline/checkpoints/1600Hz/directivity_1600Hz.csv"
+    },
+    {
+      "case": "baseline",
+      "stage": "onset",
+      "frequency_Hz": 1800.0,
+      "png": "../../visualizations/diaphragm_breakup_parameter_study_20260901/acoustic_impact/baseline/baseline_onset_1800Hz_acoustic_impact.png",
+      "svg": "../../visualizations/diaphragm_breakup_parameter_study_20260901/acoustic_impact/baseline/baseline_onset_1800Hz_acoustic_impact.svg",
+      "solid_vtu": "../../runs/diaphragm_breakup_comparison_20260901/full_sweep/baseline/checkpoints/1800Hz/solid_1800Hz.vtu",
+      "acoustic_vtu": "../../runs/diaphragm_breakup_comparison_20260901/full_sweep/baseline/checkpoints/1800Hz/acoustic_1800Hz.vtu",
+      "directivity_csv": "../../runs/diaphragm_breakup_comparison_20260901/full_sweep/baseline/checkpoints/1800Hz/directivity_1800Hz.csv"
+    },
+    {
+      "case": "baseline",
+      "stage": "developed",
+      "frequency_Hz": 6300.0,
+      "png": "../../visualizations/diaphragm_breakup_parameter_study_20260901/acoustic_impact/baseline/baseline_developed_6300Hz_acoustic_impact.png",
+      "svg": "../../visualizations/diaphragm_breakup_parameter_study_20260901/acoustic_impact/baseline/baseline_developed_6300Hz_acoustic_impact.svg",
+      "solid_vtu": "../../runs/diaphragm_breakup_comparison_20260901/full_sweep/baseline/checkpoints/6300Hz/solid_6300Hz.vtu",
+      "acoustic_vtu": "../../runs/diaphragm_breakup_comparison_20260901/full_sweep/baseline/checkpoints/6300Hz/acoustic_6300Hz.vtu",
+      "directivity_csv": "../../runs/diaphragm_breakup_comparison_20260901/full_sweep/baseline/checkpoints/6300Hz/directivity_6300Hz.csv"
+    },
+    {
+      "case": "stiff_ringing",
+      "stage": "piston",
+      "frequency_Hz": 2500.0,
+      "png": "../../visualizations/diaphragm_breakup_parameter_study_20260901/acoustic_impact/stiff_ringing/stiff_ringing_piston_2500Hz_acoustic_impact.png",
+      "svg": "../../visualizations/diaphragm_breakup_parameter_study_20260901/acoustic_impact/stiff_ringing/stiff_ringing_piston_2500Hz_acoustic_impact.svg",
+      "solid_vtu": "../../runs/diaphragm_breakup_comparison_20260901/full_sweep/stiff_ringing/checkpoints/2500Hz/solid_2500Hz.vtu",
+      "acoustic_vtu": "../../runs/diaphragm_breakup_comparison_20260901/full_sweep/stiff_ringing/checkpoints/2500Hz/acoustic_2500Hz.vtu",
+      "directivity_csv": "../../runs/diaphragm_breakup_comparison_20260901/full_sweep/stiff_ringing/checkpoints/2500Hz/directivity_2500Hz.csv"
+    },
+    {
+      "case": "stiff_ringing",
+      "stage": "onset",
+      "frequency_Hz": 2800.0,
+      "png": "../../visualizations/diaphragm_breakup_parameter_study_20260901/acoustic_impact/stiff_ringing/stiff_ringing_onset_2800Hz_acoustic_impact.png",
+      "svg": "../../visualizations/diaphragm_breakup_parameter_study_20260901/acoustic_impact/stiff_ringing/stiff_ringing_onset_2800Hz_acoustic_impact.svg",
+      "solid_vtu": "../../runs/diaphragm_breakup_comparison_20260901/full_sweep/stiff_ringing/checkpoints/2800Hz/solid_2800Hz.vtu",
+      "acoustic_vtu": "../../runs/diaphragm_breakup_comparison_20260901/full_sweep/stiff_ringing/checkpoints/2800Hz/acoustic_2800Hz.vtu",
+      "directivity_csv": "../../runs/diaphragm_breakup_comparison_20260901/full_sweep/stiff_ringing/checkpoints/2800Hz/directivity_2800Hz.csv"
+    },
+    {
+      "case": "stiff_ringing",
+      "stage": "developed",
+      "frequency_Hz": 8000.0,
+      "png": "../../visualizations/diaphragm_breakup_parameter_study_20260901/acoustic_impact/stiff_ringing/stiff_ringing_developed_8000Hz_acoustic_impact.png",
+      "svg": "../../visualizations/diaphragm_breakup_parameter_study_20260901/acoustic_impact/stiff_ringing/stiff_ringing_developed_8000Hz_acoustic_impact.svg",
+      "solid_vtu": "../../runs/diaphragm_breakup_comparison_20260901/full_sweep/stiff_ringing/checkpoints/8000Hz/solid_8000Hz.vtu",
+      "acoustic_vtu": "../../runs/diaphragm_breakup_comparison_20260901/full_sweep/stiff_ringing/checkpoints/8000Hz/acoustic_8000Hz.vtu",
+      "directivity_csv": "../../runs/diaphragm_breakup_comparison_20260901/full_sweep/stiff_ringing/checkpoints/8000Hz/directivity_8000Hz.csv"
+    }
+  ]
+}
