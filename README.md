@@ -18,6 +18,13 @@
 - `tests/`、`self_test.py`：独立性和数值代码检查；
 - `tools/`：磁律、张量共能 pilot、审计和报告工具。
 
+The repository also contains an isolated non-axisymmetric diagnostic line:
+`src/loudspeaker_time_fem/asymmetry3d.py`,
+`configs/asymmetry3d_diagnostic.json`, and `tools/plot_asymmetry3d.py`.
+It supports prescribed circumferential modes (including m=1 rocking and m>=2
+breakup), asymmetric rear basket transmission, 3-D Rayleigh radiation, and an
+explicitly approximate Kirchhoff enclosure-scattering model.
+
 COMSOL 许可证和已求解模型不在仓库中。默认 Python 主链不在运行时读取 COMSOL 结果；COMSOL 文件只用于独立 benchmark。
 
 ## Installation and first checks
@@ -52,5 +59,6 @@ PYTHONPATH=src python cli.py run \
 - 张量共能 pilot 的 0.5% 网格门槛尚未通过，因此不能把 pilot 结果描述为生产模型或网格收敛结论；
 - `README_CN.md` 中的误差数字是历史完整项目的证据摘要，不代表解压后已经重新运行；
 - 少量历史诊断脚本保留了旧 `/mnt/...` 默认路径，运行这些脚本时必须显式指定本机路径；主生产入口使用仓库内的 `inputs/` 和 `configs/`。
+- 三维非轴对称诊断目前需要用户给定周向模态幅值；它不是三维结构模态或非线性屈曲求解器，箱体散射也不是收敛的全波 FEM/BEM。
 
 如需修改物理模型、配置或数值内核，请先阅读 `README_CN.md` 的“新 AI 必须先接受的结论”“下一阶段的唯一推荐路线”和“禁止事项”。

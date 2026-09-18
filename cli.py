@@ -39,11 +39,29 @@ def _parser() -> argparse.ArgumentParser:
         default=None,
         help="临时计算根目录；建议指向 WSL Linux 文件系统，完成后一次性回写 outdir",
     )
+    asymmetry = sub.add_parser(
+        "asymmetry3d",
+        help="运行周向模态、摇摆、盆架遮挡与三维辐射诊断",
+    )
+    asymmetry.add_argument(
+        "--config", default=str(ROOT / "configs/asymmetry3d_diagnostic.json")
+    )
+    asymmetry.add_argument(
+        "--outdir", default=str(ROOT / "runs/asymmetry3d_diagnostic")
+    )
     return parser
 
 
 def main() -> int:
     args = _parser().parse_args()
+    if args.command == "asymmetry3d":
+        from loudspeaker_time_fem.asymmetry3d import analyze, export_analysis
+
+        config_path = Path(args.config).resolve()
+        config = json.loads(config_path.read_text(encoding="utf-8"))
+        summary = export_analysis(analyze(config), Path(args.outdir).resolve())
+        print(json.dumps(summary, ensure_ascii=False, indent=2))
+        return 0
     config, config_path = load_config(args.config)
     if not args.allow_reference_diagnostic:
         assert_native_production_config(config)

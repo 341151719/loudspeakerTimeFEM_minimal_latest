@@ -157,7 +157,34 @@ pilot 的 9/9 个点均求解收敛，但：
 
 所有图必须有单位、色标、网格/配置标识；所有汇总数必须能追溯到逐点 CSV/JSON。报告不得只贴漂亮图片，也不得只有汇总表而没有绝对原始值。
 
-## 10. 禁止事项与完成定义
+## 10. 三维非轴对称诊断线
+
+项目现已加入第一层三维非轴对称分析：
+
+- `src/loudspeaker_time_fem/asymmetry3d.py`：周向 Fourier 模态、摇摆倾角、周向高阶分割能量、盆架角向透射/模态耦合、Rayleigh 三维辐射和有限箱体 Kirchhoff 散射；
+- `configs/asymmetry3d_diagnostic.json`：包含 `m=0/1/3/5`、五辐条盆架和偏置矩形箱体的诊断示例；
+- `tools/plot_asymmetry3d.py`：分别输出振膜/盆架、膜前近场、膜后近场、箱体背板外场和全空间远场；
+- `cli.py asymmetry3d`：输出机器可读 NPZ 与 JSON。
+
+运行机器数据分析：
+
+```bash
+PYTHONPATH=src python cli.py asymmetry3d \
+  --config configs/asymmetry3d_diagnostic.json \
+  --outdir runs/asymmetry3d_diagnostic
+```
+
+运行独立可视化：
+
+```bash
+PYTHONPATH=src python tools/plot_asymmetry3d.py \
+  --config configs/asymmetry3d_diagnostic.json \
+  --outdir runs/asymmetry3d_diagnostic_visuals
+```
+
+必须准确理解其物理层级：当前版本对给定的周向模态速度做三维声辐射分析，可以表示 `m=1` 摇摆、`m>=2` 花瓣分割、非对称盆架后向遮挡和非对称箱体的有限面散射；它还没有从材料、悬边和音圈三维网格自动求出这些模态幅值。箱体使用高频 Kirchhoff physical-optics 近似，不是已收敛的全波 BEM/FEM。局部几何非线性屈曲、接触、裂纹扩展及大冲程下的自发对称破缺仍需要第二层三维结构/声学体网格求解器，不能由本诊断配置宣称已经预测。
+
+## 11. 禁止事项与完成定义
 
 禁止：改生产配置做试验；读取历史 COMSOL 数据作为运行时校正；把诊断辨识参数称为预测；只看求解器残差而忽略网格收敛；用单频/单点改善替代完整回归；覆盖唯一 COMSOL canonical 文件；在输入目录写结果。
 
