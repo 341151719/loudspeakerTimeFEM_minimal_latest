@@ -1,5 +1,7 @@
 # Agent entrypoint: loudspeakerTimeFEM
 
+Frequency snapshot baseline and import closure: [`docs/FREQUENCY_SNAPSHOT_AUDIT_CN.md`](docs/FREQUENCY_SNAPSHOT_AUDIT_CN.md).
+
 This repository is the independent 2-D axisymmetric, time-domain loudspeaker FEM project. Treat the checked-in files and current branch as authoritative; do not assume another checkout is synchronized.
 
 ## Read first

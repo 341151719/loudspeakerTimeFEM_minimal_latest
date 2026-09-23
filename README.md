@@ -1,5 +1,7 @@
 # loudspeakerTimeFEM minimal latest
 
+Frequency-source snapshot baseline and differences: [`docs/FREQUENCY_SNAPSHOT_AUDIT_CN.md`](docs/FREQUENCY_SNAPSHOT_AUDIT_CN.md).
+
 二维轴对称扬声器时域多物理 FEM 的最小独立源码包，面向 Python 求解、COMSOL 离线验证和后续 AI 分析。
 
 ## Start here

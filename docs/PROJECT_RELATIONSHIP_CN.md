@@ -1,5 +1,7 @@
 # 两个扬声器 FEM 仓库：相似点、区别和代码边界
 
+更新的频域快照基线及函数级差异核对见 [`FREQUENCY_SNAPSHOT_AUDIT_CN.md`](FREQUENCY_SNAPSHOT_AUDIT_CN.md)，对应频域仓库的[逐文件清单](https://github.com/341151719/loudspeakerFEM_minimal_latest/blob/main/docs/TIME_SNAPSHOT_AUDIT_CN.md)。
+
 本文件与 [`loudspeakerFEM` 的同名说明](https://github.com/341151719/loudspeakerFEM_minimal_latest/blob/main/docs/PROJECT_RELATIONSHIP_CN.md) 互相对应。两个仓库都是独立、可单独安装的 Python FEM 工程；它们研究相同类型的扬声器，但解不同类型的问题，不能把各自的验证结果当作同一模型的等价复现。
 
 ## 相似点
