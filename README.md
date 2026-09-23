@@ -4,7 +4,7 @@
 
 ## Start here
 
-完整的中文交接说明在 [`README_CN.md`](README_CN.md)。它记录了当前生产配置、物理合同、验证边界、张量共能 pilot 的停止点以及下一阶段的推荐路线。版本冻结日期为 **2026-08-01**。
+Agent 入口在 [`AGENTS.md`](AGENTS.md)，任务导航见 [`docs/AGENT_MAP_CN.md`](docs/AGENT_MAP_CN.md)。完整的中文技术交接说明在 [`README_CN.md`](README_CN.md)；与频域仓库的相似点、差异和 vendored 代码边界见 [`docs/PROJECT_RELATIONSHIP_CN.md`](docs/PROJECT_RELATIONSHIP_CN.md)。它记录了当前生产配置、物理合同、验证边界、张量共能 pilot 的停止点以及下一阶段的推荐路线。版本冻结日期为 **2026-08-01**。
 
 这个仓库不包含历史运行结果、图片、已求解的 COMSOL MPH 文件或 Python 虚拟环境；`inputs/` 中保留的是开箱运行所需的网格、几何、静磁场和磁律输入。
 

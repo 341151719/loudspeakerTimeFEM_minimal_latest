@@ -5,6 +5,8 @@
 
 ## 1. 新 AI 必须先接受的结论
 
+开始处理前先读根目录 [`AGENTS.md`](AGENTS.md) 和 [`docs/AGENT_MAP_CN.md`](docs/AGENT_MAP_CN.md)。涉及频域代码时，再读 [`docs/PROJECT_RELATIONSHIP_CN.md`](docs/PROJECT_RELATIONSHIP_CN.md)；`inputs/frequency_mainline/` 是此时域仓库自己的依赖快照，不会随旁边的频域仓库自动更新。
+
 这是扬声器二维轴对称时域 FEM 的当前生产源码包。解压后的目录是独立项目，不允许依赖原始 `loudspeakerTimeFEM`、相邻 `loudspeakerFEM` 或开发机绝对路径。Python 第三方库通过 pip 安装；Python 运行必需、不能由 pip 获得的网格、几何、静磁场和磁律已放入 `inputs/`。
 
 当前生产入口是：
@@ -33,7 +35,7 @@ inputs/nonlinear_magnetic_law_20260728.json
 - `tests/`、`self_test.py`：代码与独立性检查；
 - `tools/`：磁律构造、张量共能 pilot/拟合/报告、审计及诊断工具源码；
 - `comsol_validation/` 中的 Python/Java 导出与对比程序，但不带对比数据；
-- 本文件，它是包内唯一的项目说明文档。
+- 本文件是物理模型、生产状态和数值验收的权威交接说明。Agent 导航文件 [`AGENTS.md`](AGENTS.md) 与 [`docs/AGENT_MAP_CN.md`](docs/AGENT_MAP_CN.md) 只负责指路，不复制或覆盖本文件中的物理结论。两个独立仓库的边界见 [`docs/PROJECT_RELATIONSHIP_CN.md`](docs/PROJECT_RELATIONSHIP_CN.md)。
 
 本包明确不包含：
 
